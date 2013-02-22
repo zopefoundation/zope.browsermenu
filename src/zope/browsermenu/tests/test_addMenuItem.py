@@ -39,12 +39,17 @@ import unittest
 from doctest import DocTestSuite
 import re
 import pprint
-import cStringIO
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component.interface import provideInterface
 from zope.browsermenu.metaconfigure import addMenuItem
 from zope.browsermenu.metaconfigure import _checkViewFor
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    # Py3: Change of location.
+    from io import StringIO
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
 
@@ -77,7 +82,7 @@ class Context(object):
             self.actions.append(discriminator)
 
     def __repr__(self):
-        stream = cStringIO.StringIO()
+        stream = StringIO()
         pprinter = pprint.PrettyPrinter(stream=stream, width=60)
         pprinter.pprint(self.actions)
         r = stream.getvalue()

@@ -97,10 +97,10 @@ class MenuField(GlobalObject):
 
         try:
             value = self.context.resolve('zope.app.menus.'+name)
-        except ConfigurationError, v:
+        except ConfigurationError as v:
             try:
                 value = self.context.resolve(name)
-            except ConfigurationError, v:
+            except ConfigurationError as v:
                 raise ValidationError(v)
         
         self.validate(value)

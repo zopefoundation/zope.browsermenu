@@ -60,11 +60,11 @@ content component first:
   ...
   ...     def publishTraverse(self, request, name):
   ...         if name.startswith('fb'):
-  ...             raise Forbidden, name
+  ...             raise Forbidden(name)
   ...         if name.startswith('ua'):
-  ...             raise Unauthorized, name
+  ...             raise Unauthorized(name)
   ...         if name.startswith('le'):
-  ...             raise LookupError, name
+  ...             raise LookupError(name)
   ...         return self.foo
 
 We also implemented the ``IBrowserPublisher`` interface, because we want to
@@ -570,8 +570,8 @@ Register several menu items for a particular menu.
   >>> items.menuItem(context, u'view.html', 'View')
   >>> items.subMenuItem(context, SaveOptions, 'Save')
 
-  >>> disc = [action['discriminator'] for action in context.actions]
-  >>> disc.sort()
+  >>> disc = sorted([action['discriminator'] for action in context.actions
+  ...                if action['discriminator'] is not None])
   >>> pprint(disc[-2:])
   [('adapter',
     (<InterfaceClass __builtin__.ITest>,
@@ -610,7 +610,7 @@ Also create a custom sub menu item class inheriting standard BrowserSubMenuItem:
 
   >>> items.subMenuItem(context, SaveOptions, 'Save', item_class=MySubMenuItem)
 
-  >>> actions = sorted(context.actions, key=lambda a:a['discriminator'])
+  >>> actions = sorted(context.actions, key=lambda a:a['discriminator'] or ())
   >>> factories = [action['args'][1] for action in actions][-2:]
 
   >>> factories[0].factory is MySubMenuItem

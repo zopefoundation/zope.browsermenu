@@ -13,6 +13,7 @@
 ##############################################################################
 """Menu Directives Configuration Handlers
 """
+import six
 from zope.browser.interfaces import IAdding
 from zope.component import getGlobalSiteManager, getUtility
 from zope.component.interface import provideInterface
@@ -264,7 +265,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
         forname = ''
 
     if menu is not None:
-        if isinstance(menu, (str, unicode)):
+        if isinstance(menu, six.string_types):
             menu = getUtility(IMenuItemType, menu)
             if menu is None:
                 raise ValueError("Missing menu id '%s'" % menu)

@@ -17,7 +17,6 @@
 import sys
 import os
 import unittest
-from cStringIO import StringIO
 from doctest import DocTestSuite
 
 from zope import component
@@ -41,6 +40,12 @@ from zope.component.testfiles.views import IC, V1, VZMI, R1, IV
 from zope.browsermenu.menu import getFirstMenuItem, BrowserMenu
 from zope.browsermenu.interfaces import IMenuItemType, IBrowserMenu
 from zope.testing import cleanup
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    # Py3: Change of location.
+    from io import StringIO
 
 tests_path = os.path.join(
     os.path.dirname(zope.browsermenu.__file__),

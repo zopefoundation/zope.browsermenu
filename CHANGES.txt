@@ -2,16 +2,17 @@
 CHANGES
 =======
 
-4.0.1 (unreleased)
-==================
+4.1.0a1 (unreleased)
+====================
 
-- TBD
+- Added support for Python 3.3.
+
 
 4.0.0 (2012-07-04)
 ==================
 
 - Strip noise from context actions in doctests.
- 
+
   The output is now more meaningful, and hides irrelevant details.
   (forward-compatibility with ``zope.component`` 4.0.0).
 
