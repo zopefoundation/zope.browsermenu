@@ -34,7 +34,7 @@ def alltests():
     return unittest.TestSuite(suites)
 
 setup(name='zope.browsermenu',
-      version = '4.0.1dev',
+      version='4.1.0a1',
       url='http://pypi.python.org/pypi/zope.browsermenu/',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
