@@ -92,7 +92,7 @@ class TestPermissions(cleanup.CleanUp, unittest.TestCase):
         items = zope.component.getAdapters((C2(), TestRequest()),
                                            menu.getMenuItemType())
         item = list(items)[0][1]
-        self.assertEquals("zope.View", item.permission)
+        self.assertEqual("zope.View", item.permission)
 
 
 class Test(cleanup.CleanUp, unittest.TestCase):
