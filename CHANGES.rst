@@ -5,6 +5,9 @@ CHANGES
 4.1.0 (unreleased)
 ==================
 
+- Added support for PyPy.  PyPy3 support is pending a release of fix for
+  https://bitbucket.org/pypy/pypy/issue/1946).
+
 - Added support for Python 3.4.
 
 - Support for testing on Travis.
