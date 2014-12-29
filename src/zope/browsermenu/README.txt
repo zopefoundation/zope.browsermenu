@@ -127,7 +127,7 @@ item should also not be shown.
   ...     interaction = None
 
 
-In the first case, the permission of the menu item was explicitely
+In the first case, the permission of the menu item was explicitly
 specified. Make sure that the user needs this permission to make the menu
 item available.
 
@@ -149,14 +149,14 @@ Now we specify a principal that does not have the specified permission.
   >>> item.available()
   False
 
-In the second case, the permission is not explicitely defined and the
+In the second case, the permission is not explicitly defined and the
 availability is determined by the permission required to access the
 action.
 
   >>> item.permission = None
 
-  All views starting with 'fb' are forbidden, the ones with 'ua' are
-  unauthorized and all others are allowed.
+All views starting with 'fb' are forbidden, the ones with 'ua' are
+unauthorized and all others are allowed.
 
   >>> item.action = u'fb'
   >>> item.available()
@@ -169,8 +169,8 @@ action.
   True
 
 Also, sometimes a menu item might be registered for a view that does not
-exist. In those cases the traversal mechanism raises a `TraversalError`, which
-is a special type of `LookupError`. All actions starting with `le` should
+exist. In those cases the traversal mechanism raises a ``TraversalError``, which
+is a special type of ``LookupError``. All actions starting with 'le' should
 raise this error:
 
   >>> item.action = u'le'
@@ -178,7 +178,7 @@ raise this error:
   False
 
 Now let's test filtering. If the filter is specified, it is assumed to be
-a TALES obejct.
+a TALES object.
 
   >>> from zope.pagetemplate.engine import Engine
   >>> item.action = u'a'
@@ -589,21 +589,21 @@ Custom menu item classes
 
 We can register menu items and sub menu items with custom classes instead
 of ones used by default. For that, we need to create an implementation
-of IBrowserMenuItem or IBrowserSubMenuItem.
+of ``IBrowserMenuItem`` or ``IBrowserSubMenuItem``.
 
   >>> context = Context()
   >>> items = metaconfigure.menuItemsDirective(context, TestMenuItemType, ITest)
   >>> context.actions
   []
 
-Let's create a custom menu item class that inherits standard BrowserMenuItem:
+Let's create a custom menu item class that inherits standard ``BrowserMenuItem``:
 
   >>> class MyMenuItem(menu.BrowserMenuItem):
   ...    pass
 
   >>> items.menuItem(context, u'view.html', 'View', item_class=MyMenuItem)
 
-Also create a custom sub menu item class inheriting standard BrowserSubMenuItem:
+Also create a custom sub menu item class inheriting standard ``BrowserSubMenuItem``:
 
   >>> class MySubMenuItem(menu.BrowserSubMenuItem):
   ...    pass
@@ -620,7 +620,7 @@ Also create a custom sub menu item class inheriting standard BrowserSubMenuItem:
   True
 
 These directive will fail if you provide an item_class that does not
-implement IBrowserMenuItem/IBrowserSubMenuItem:
+implement ``IBrowserMenuItem``/``IBrowserSubMenuItem``:
 
   >>> items.menuItem(context, u'fail', 'Failed', item_class=object)
   Traceback (most recent call last):
