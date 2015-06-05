@@ -30,6 +30,7 @@ from zope.browsermenu.menu import BrowserMenu, BrowserMenuItem, BrowserSubMenuIt
 from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
 from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
 from zope.browsermenu.interfaces import AddMenu
+from ._compat import _u
 
 # Create special modules that contain all menu item types
 from types import ModuleType as module
@@ -46,7 +47,7 @@ _order_counter = {}
 
 
 def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
-                  title=u'', description=u''):
+                  title=_u(''), description=_u('')):
     """Registers a new browser menu."""
     if id is None and interface is None:
         raise ConfigurationError(
@@ -105,7 +106,7 @@ def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
 
 
 def menuItemDirective(_context, menu, for_,
-                      action, title, description=u'', icon=None, filter=None,
+                      action, title, description=_u(''), icon=None, filter=None,
                       permission=None, layer=IDefaultBrowserLayer, extra=None,
                       order=0, item_class=None):
     """Register a single menu item."""
@@ -115,7 +116,7 @@ def menuItemDirective(_context, menu, for_,
 
 
 def subMenuItemDirective(_context, menu, for_, title, submenu,
-                         action=u'', description=u'', icon=None, filter=None,
+                         action=_u(''), description=_u(''), icon=None, filter=None,
                          permission=None, layer=IDefaultBrowserLayer,
                          extra=None, order=0, item_class=None):
     """Register a single sub-menu menu item."""
@@ -159,7 +160,7 @@ class menuItemsDirective(object):
         self.layer = layer
         self.permission = permission
 
-    def menuItem(self, _context, action, title, description=u'',
+    def menuItem(self, _context, action, title, description=_u(''),
                  icon=None, filter=None, permission=None, extra=None,
                  order=0, item_class=None):
 
@@ -187,8 +188,8 @@ class menuItemsDirective(object):
         adapter(_context, (factory,), self.menuItemType,
                 (self.for_, self.layer), name=title)
 
-    def subMenuItem(self, _context, submenu, title, description=u'',
-                    action=u'', icon=None, filter=None, permission=None,
+    def subMenuItem(self, _context, submenu, title, description=_u(''),
+                    action=_u(''), icon=None, filter=None, permission=None,
                     extra=None, order=0, item_class=None):
 
         if filter is not None:

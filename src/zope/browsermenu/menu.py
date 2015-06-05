@@ -29,12 +29,13 @@ from zope.traversing.publicationtraverse import PublicationTraverser
 from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
 from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuAccessView
+from ._compat import _u
 
 @implementer(IBrowserMenu)
 class BrowserMenu(object):
     """Browser Menu"""
 
-    def __init__(self, id, title=u'', description=u''):
+    def __init__(self, id, title=_u(''), description=_u('')):
         self.id = id
         self.title = title
         self.description = description
@@ -54,7 +55,7 @@ class BrowserMenu(object):
         # Now order the result. This is not as easy as it seems.
         #
         # (1) Look at the interfaces and put the more specific menu entries
-        #     to the front. 
+        #     to the front.
         # (2) Sort unambigious entries by order and then by title.
         ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
         max_key = len(ifaces)
@@ -77,7 +78,7 @@ class BrowserMenu(object):
             {'title': title,
              'description': item.description,
              'action': item.action,
-             'selected': (item.selected() and u'selected') or u'',
+             'selected': (item.selected() and _u('selected')) or _u(''),
              'icon': item.icon,
              'extra': item.extra,
              'submenu': (IBrowserSubMenuItem.providedBy(item) and
@@ -91,9 +92,9 @@ class BrowserMenu(object):
 class BrowserMenuItem(BrowserView):
     """Browser Menu Item Class"""
 
-    title = u''
-    description = u''
-    action = u''
+    title = _u('')
+    description = _u('')
+    action = _u('')
     extra = None
     order = 0
     permission = None
@@ -109,7 +110,7 @@ class BrowserMenuItem(BrowserView):
             if not checkPermission(self.permission, self.context):
                 return False
 
-        elif self.action != u'':
+        elif self.action != _u(''):
             # Otherwise, test access by attempting access
             path = self.action
             l = self.action.find('?')
@@ -170,7 +171,7 @@ class BrowserSubMenuItem(BrowserMenuItem):
     submenuId = None
 
     def selected(self):
-        if self.action is u'':
+        if self.action is _u(''):
             return False
         return super(BrowserSubMenuItem, self).selected()
 
