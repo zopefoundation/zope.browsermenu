@@ -29,7 +29,7 @@ Now we have to create and register the menu itself:
 
   >>> from zope.browsermenu.interfaces import IBrowserMenu
   >>> provideUtility(
-  ...     menu.BrowserMenu('edit', 'Edit', 'Edit Men'), IBrowserMenu, 'edit')
+  ...     menu.BrowserMenu('edit', 'Edit', 'Edit Menu'), IBrowserMenu, 'edit')
 
 Note that these steps seem like a lot of boilerplate, but all this work is
 commonly done for you via ZCML. An item in a menu is simply an adapter that
