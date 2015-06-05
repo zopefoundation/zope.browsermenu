@@ -230,7 +230,7 @@ manually here):
   >>> zope.interface.directlyProvides(SaveOptions, IMenuItemType)
 
   >>> provideUtility(SaveOptions, IMenuItemType, 'save')
-  >>> provideUtility(menu.BrowserMenu('save', 'Save', 'Save Men'),
+  >>> provideUtility(menu.BrowserMenu('save', 'Save', 'Save Menu'),
   ...                IBrowserMenu, 'save')
 
 Now we can assign the sub-menu id to the menu item:
@@ -371,7 +371,7 @@ Now we create a menu using the names to create a menu:
   ...                  'selected': '',
   ...                  'icon': None,
   ...                  'extra': {},
-  ...                  'submen': None}
+  ...                  'submenu': None}
   ...                 for name in object.names]
 
 and register it:
@@ -387,21 +387,21 @@ We can now get the menu items using the previously introduced API:
     'extra': {},
     'icon': None,
     'selected': '',
-    'submen': None,
+    'submenu': None,
     'title': 'README.txt'},
    {'action': 'logo.png/manage',
     'description': None,
     'extra': {},
     'icon': None,
     'selected': '',
-    'submen': None,
+    'submenu': None,
     'title': 'logo.png'},
    {'action': 'script.py/manage',
     'description': None,
     'extra': {},
     'icon': None,
     'selected': '',
-    'submen': None,
+    'submenu': None,
     'title': 'script.py'}]
 
 
