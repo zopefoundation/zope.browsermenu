@@ -44,6 +44,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component.interface import provideInterface
 from zope.browsermenu.metaconfigure import addMenuItem
 from zope.browsermenu.metaconfigure import _checkViewFor
+from .._compat import _u
 
 try:
     from cStringIO import StringIO
@@ -227,7 +228,7 @@ def test_w_factory_icon_extra_order():
     >>> context = Context()
     >>> addMenuItem(context, factory="x.y.z", title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
-    ...             filter="context/foo", icon=u'/@@/icon.png', extra='Extra',
+    ...             filter="context/foo", icon=_u('/@@/icon.png'), extra='Extra',
     ...             order=99)
     >>> context
     [('adapter',

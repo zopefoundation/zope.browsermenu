@@ -29,7 +29,7 @@ Now we have to create and register the menu itself:
 
   >>> from zope.browsermenu.interfaces import IBrowserMenu
   >>> provideUtility(
-  ...     menu.BrowserMenu('edit', u'Edit', u'Edit Menu'), IBrowserMenu, 'edit')
+  ...     menu.BrowserMenu('edit', 'Edit', 'Edit Menu'), IBrowserMenu, 'edit')
 
 Note that these steps seem like a lot of boilerplate, but all this work is
 commonly done for you via ZCML. An item in a menu is simply an adapter that
@@ -84,13 +84,13 @@ Now we add a title, description, order and icon and see whether we can then
 access the value. Note that these assignments are always automatically done by
 the framework.
 
-  >>> item.title = u'Item 1'
+  >>> item.title = 'Item 1'
   >>> item.title
-  u'Item 1'
+  'Item 1'
 
-  >>> item.description = u'This is Item 1.'
+  >>> item.description = 'This is Item 1.'
   >>> item.description
-  u'This is Item 1.'
+  'This is Item 1.'
 
   >>> item.order
   0
@@ -100,9 +100,9 @@ the framework.
 
   >>> item.icon is None
   True
-  >>> item.icon = u'/@@/icon.png'
+  >>> item.icon = '/@@/icon.png'
   >>> item.icon
-  u'/@@/icon.png'
+  '/@@/icon.png'
 
 Since there is no permission or view specified yet, the menu item should
 be available and not selected.
@@ -115,7 +115,7 @@ be available and not selected.
 There are two ways to deny availability of a menu item: (1) the current
 user does not have the correct permission to access the action or the menu
 item itself, or (2) the filter returns ``False``, in which case the menu
-item should also not be shown. 
+item should also not be shown.
 
   >>> from zope.security.interfaces import IPermission
   >>> from zope.security.permission import Permission
@@ -158,13 +158,13 @@ action.
 All views starting with 'fb' are forbidden, the ones with 'ua' are
 unauthorized and all others are allowed.
 
-  >>> item.action = u'fb'
+  >>> item.action = 'fb'
   >>> item.available()
   False
-  >>> item.action = u'ua'
+  >>> item.action = 'ua'
   >>> item.available()
   False
-  >>> item.action = u'a'
+  >>> item.action = 'a'
   >>> item.available()
   True
 
@@ -173,7 +173,7 @@ exist. In those cases the traversal mechanism raises a ``TraversalError``, which
 is a special type of ``LookupError``. All actions starting with 'le' should
 raise this error:
 
-  >>> item.action = u'le'
+  >>> item.action = 'le'
   >>> item.available()
   False
 
@@ -181,7 +181,7 @@ Now let's test filtering. If the filter is specified, it is assumed to be
 a TALES object.
 
   >>> from zope.pagetemplate.engine import Engine
-  >>> item.action = u'a'
+  >>> item.action = 'a'
   >>> item.filter = Engine.compile('not:context')
   >>> item.available()
   False
@@ -196,10 +196,10 @@ Finally, make sure that the menu item can be selected.
 
   >>> item.selected()
   False
-  >>> item.action = u'view.html'
+  >>> item.action = 'view.html'
   >>> item.selected()
   True
-  >>> item.action = u'@@view.html'
+  >>> item.action = '@@view.html'
   >>> item.selected()
   True
   >>> item.request = TestRequest(
@@ -207,7 +207,7 @@ Finally, make sure that the menu item can be selected.
   ...     PATH_INFO='/++view++view.html')
   >>> item.selected()
   True
-  >>> item.action = u'otherview.html'
+  >>> item.action = 'otherview.html'
   >>> item.selected()
   False
 
@@ -230,10 +230,10 @@ manually here):
   >>> zope.interface.directlyProvides(SaveOptions, IMenuItemType)
 
   >>> provideUtility(SaveOptions, IMenuItemType, 'save')
-  >>> provideUtility(menu.BrowserMenu('save', u'Save', u'Save Menu'),
+  >>> provideUtility(menu.BrowserMenu('save', 'Save', 'Save Menu'),
   ...                IBrowserMenu, 'save')
 
-Now we can assign the sub-menu id to the menu item: 
+Now we can assign the sub-menu id to the menu item:
 
   >>> item.submenuId = 'save'
 
@@ -255,7 +255,7 @@ the items:
   >>> from zope.component import provideAdapter
   >>> from zope.publisher.interfaces.browser import IBrowserRequest
 
-  >>> undo = metaconfigure.MenuItemFactory(menu.BrowserMenuItem, title="Undo", 
+  >>> undo = metaconfigure.MenuItemFactory(menu.BrowserMenuItem, title="Undo",
   ...                                 action="undo.html")
   >>> provideAdapter(undo, (IContent, IBrowserRequest), EditMenu, 'undo')
 
@@ -263,20 +263,20 @@ the items:
   ...                                 action="redo.html", icon="/@@/redo.png")
   >>> provideAdapter(redo, (IContent, IBrowserRequest), EditMenu, 'redo')
 
-  >>> save = metaconfigure.MenuItemFactory(menu.BrowserSubMenuItem, title="Save", 
+  >>> save = metaconfigure.MenuItemFactory(menu.BrowserSubMenuItem, title="Save",
   ...                                 submenuId='save', order=2)
   >>> provideAdapter(save, (IContent, IBrowserRequest), EditMenu, 'save')
 
 And now the save options:
 
-  >>> saveas = metaconfigure.MenuItemFactory(menu.BrowserMenuItem, title="Save as", 
+  >>> saveas = metaconfigure.MenuItemFactory(menu.BrowserMenuItem, title="Save as",
   ...                                   action="saveas.html")
-  >>> provideAdapter(saveas, (IContent, IBrowserRequest), 
+  >>> provideAdapter(saveas, (IContent, IBrowserRequest),
   ...                SaveOptions, 'saveas')
 
   >>> saveall = metaconfigure.MenuItemFactory(menu.BrowserMenuItem, title="Save all",
   ...                                    action="saveall.html")
-  >>> provideAdapter(saveall, (IContent, IBrowserRequest), 
+  >>> provideAdapter(saveall, (IContent, IBrowserRequest),
   ...                SaveOptions, 'saveall')
 
 Note that we can also register menu items for classes:
@@ -297,43 +297,43 @@ menu now:
 
   >>> pprint(menu.getMenu('edit', Content(), TestRequest()))
   [{'action': 'new.html',
-    'description': u'',
+    'description': '',
     'extra': None,
     'icon': None,
-    'selected': u'',
+    'selected': '',
     'submenu': None,
     'title': 'New'},
-  {'action': 'redo.html',
-    'description': u'',
+   {'action': 'redo.html',
+    'description': '',
     'extra': None,
     'icon': '/@@/redo.png',
-    'selected': u'',
+    'selected': '',
     'submenu': None,
     'title': 'Redo'},
    {'action': 'undo.html',
-    'description': u'',
+    'description': '',
     'extra': None,
     'icon': None,
-    'selected': u'',
+    'selected': '',
     'submenu': None,
     'title': 'Undo'},
-   {'action': u'',
-    'description': u'',
+   {'action': '',
+    'description': '',
     'extra': None,
     'icon': None,
-    'selected': u'',
-    'submenu': [{'action': 'saveall.html',
-                 'description': u'',
+    'selected': '',
+    'submen': [{'action': 'saveall.html',
+                 'description': '',
                  'extra': None,
                  'icon': None,
-                 'selected': u'',
+                 'selected': '',
                  'submenu': None,
                  'title': 'Save all'},
                 {'action': 'saveas.html',
-                 'description': u'',
+                 'description': '',
                  'extra': None,
                  'icon': None,
-                 'selected': u'',
+                 'selected': '',
                  'submenu': None,
                  'title': 'Save as'}],
     'title': 'Save'}]
@@ -358,17 +358,17 @@ Now we create a menu using the names to create a menu:
 
   >>> @zope.interface.implementer(IBrowserMenu)
   ... class Items(object):
-  ...  
-  ...     def __init__(self, id, title=u'', description=u''):
+  ...
+  ...     def __init__(self, id, title='', description=''):
   ...         self.id = id
   ...         self.title = title
   ...         self.description = description
-  ...     
+  ...
   ...     def getMenuItems(self, object, request):
   ...         return [{'title': name,
   ...                  'description': None,
   ...                  'action': name + '/manage',
-  ...                  'selected': u'',
+  ...                  'selected': '',
   ...                  'icon': None,
   ...                  'extra': {},
   ...                  'submenu': None}
@@ -376,7 +376,7 @@ Now we create a menu using the names to create a menu:
 
 and register it:
 
-  >>> provideUtility(Items('items', u'Items', u'Items Menu'),
+  >>> provideUtility(Items('items', 'Items', 'Items Men'),
   ...                IBrowserMenu, 'items')
 
 We can now get the menu items using the previously introduced API:
@@ -386,21 +386,21 @@ We can now get the menu items using the previously introduced API:
     'description': None,
     'extra': {},
     'icon': None,
-    'selected': u'',
+    'selected': '',
     'submenu': None,
     'title': 'README.txt'},
    {'action': 'logo.png/manage',
     'description': None,
     'extra': {},
     'icon': None,
-    'selected': u'',
+    'selected': '',
     'submenu': None,
     'title': 'logo.png'},
    {'action': 'script.py/manage',
     'description': None,
     'extra': {},
     'icon': None,
-    'selected': u'',
+    'selected': '',
     'submenu': None,
     'title': 'script.py'}]
 
@@ -412,38 +412,38 @@ As you have seen above already, we have used the menu item factory to generate
 adapter factories for menu items. The factory needs a particular
 ``IBrowserMenuItem`` class to instantiate. Here is an example using a dummy
 menu item class:
-  
+
   >>> class DummyBrowserMenuItem(object):
   ...     "a dummy factory for menu items"
   ...     def __init__(self, context, request):
   ...         self.context = context
   ...         self.request = request
-  
+
 To instantiate this class, pass the factory and the other arguments as keyword
 arguments (every key in the arguments should map to an attribute of the menu
 item class). We use dummy values for this example.
-  
+
   >>> factory = metaconfigure.MenuItemFactory(
-  ...     DummyBrowserMenuItem, title='Title', description='Description', 
-  ...     icon='Icon', action='Action', filter='Filter', 
+  ...     DummyBrowserMenuItem, title='Title', description='Description',
+  ...     icon='Icon', action='Action', filter='Filter',
   ...     permission='zope.Public', extra='Extra', order='Order', _for='For')
   >>> factory.factory is DummyBrowserMenuItem
   True
-  
+
 The "zope.Public" permission needs to be translated to ``CheckerPublic``.
-  
+
   >>> from zope.security.checker import CheckerPublic
   >>> factory.kwargs['permission'] is CheckerPublic
   True
-  
+
 Call the factory with context and request to return the instance.  We continue
 to use dummy values.
-  
+
   >>> item = factory('Context', 'Request')
-  
+
 The returned value should be an instance of the ``DummyBrowserMenuItem``, and
 have all of the values we initially set on the factory.
-  
+
   >>> isinstance(item, DummyBrowserMenuItem)
   True
   >>> item.context
@@ -468,14 +468,14 @@ have all of the values we initially set on the factory.
   'Order'
   >>> item._for
   'For'
-  
+
 If you pass a permission other than ``zope.Public`` to the
 ``MenuItemFactory``, it should pass through unmodified.
-  
+
   >>> factory = metaconfigure.MenuItemFactory(
-  ...     DummyBrowserMenuItem, title='Title', description='Description', 
-  ...     icon='Icon', action='Action', filter='Filter', 
-  ...     permission='another.Permission', extra='Extra', order='Order', 
+  ...     DummyBrowserMenuItem, title='Title', description='Description',
+  ...     icon='Icon', action='Action', filter='Filter',
+  ...     permission='another.Permission', extra='Extra', order='Order',
   ...     _for='For_')
   >>> factory.kwargs['permission']
   'another.Permission'
@@ -490,21 +490,21 @@ Directive Handlers
 Provides a new menu (item type).
 
   >>> class Context(object):
-  ...     info = u'doc'
-  ...     def __init__(self): 
+  ...     info = 'doc'
+  ...     def __init__(self):
   ...         self.actions = []
   ...
-  ...     def action(self, **kw): 
+  ...     def action(self, **kw):
   ...         self.actions.append(kw)
 
 Possibility 1: The Old Way
 ++++++++++++++++++++++++++
-  
+
   >>> context = Context()
-  >>> metaconfigure.menuDirective(context, u'menu1', title=u'Menu 1')
+  >>> metaconfigure.menuDirective(context, 'menu1', title='Menu 1')
   >>> iface = context.actions[0]['args'][1]
   >>> iface.getName()
-  u'menu1'
+  'menu1'
 
   >>> import sys
   >>> hasattr(sys.modules['zope.app.menus'], 'menu1')
@@ -537,7 +537,7 @@ Possibility 3: Specify an interface and an id
     <InterfaceClass zope.browsermenu.interfaces.IBrowserMenu>,
     'menu1'),
    None]
-   
+
 Here are some disallowed configurations.
 
   >>> context = Context()
@@ -560,14 +560,14 @@ Register several menu items for a particular menu.
   >>> class TestMenuItemType(zope.interface.Interface):
   ...     pass
 
-  >>> class ITest(zope.interface.Interface): 
+  >>> class ITest(zope.interface.Interface):
   ...     pass
 
   >>> context = Context()
   >>> items = metaconfigure.menuItemsDirective(context, TestMenuItemType, ITest)
   >>> context.actions
   []
-  >>> items.menuItem(context, u'view.html', 'View')
+  >>> items.menuItem(context, 'view.html', 'View')
   >>> items.subMenuItem(context, SaveOptions, 'Save')
 
   >>> disc = sorted([action['discriminator'] for action in context.actions
@@ -601,7 +601,7 @@ Let's create a custom menu item class that inherits standard ``BrowserMenuItem``
   >>> class MyMenuItem(menu.BrowserMenuItem):
   ...    pass
 
-  >>> items.menuItem(context, u'view.html', 'View', item_class=MyMenuItem)
+  >>> items.menuItem(context, 'view.html', 'View', item_class=MyMenuItem)
 
 Also create a custom sub menu item class inheriting standard ``BrowserSubMenuItem``:
 
@@ -622,7 +622,7 @@ Also create a custom sub menu item class inheriting standard ``BrowserSubMenuIte
 These directive will fail if you provide an item_class that does not
 implement ``IBrowserMenuItem``/``IBrowserSubMenuItem``:
 
-  >>> items.menuItem(context, u'fail', 'Failed', item_class=object)
+  >>> items.menuItem(context, 'fail', 'Failed', item_class=object)
   Traceback (most recent call last):
   ...
   ValueError: Item class (<type 'object'>) must implement IBrowserMenuItem

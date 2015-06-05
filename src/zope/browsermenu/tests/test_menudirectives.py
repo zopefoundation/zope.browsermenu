@@ -29,6 +29,7 @@ import zope.security
 from zope.testing import cleanup
 
 import zope.browsermenu
+from .._compat import _u
 
 
 template = """<configure
@@ -110,7 +111,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         def d(n):
             return {'action': "a%s" % n,
                     'title':  "t%s" % n,
-                    'description': u'',
+                    'description': _u(''),
                     'selected': '',
                     'submenu': None,
                     'icon': None,
@@ -120,17 +121,17 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(
             menu[-1],
             {'submenu': [{'submenu': None,
-                          'description': u'',
+                          'description': _u(''),
                           'extra': None,
-                          'selected': u'',
-                          'action': u'a10',
-                          'title': u't10',
+                          'selected': _u(''),
+                          'action': _u('a10'),
+                          'title': _u('t10'),
                           'icon': None}],
-             'description': u'',
+             'description': _u(''),
              'extra': None,
-             'selected': u'',
-             'action': u'',
-             'title': u's1',
+             'selected': _u(''),
+             'action': _u(''),
+             'title': _u('s1'),
              'icon': None})
 
         first = zope.browsermenu.menu.getFirstMenuItem(
