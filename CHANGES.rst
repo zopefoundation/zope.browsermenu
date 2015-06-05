@@ -4,23 +4,23 @@ Changes
 4.1.1 (unreleased)
 ==================
 
-- Added support for PyPy3 and Python 3.2.
+- Add support for PyPy3 and Python 3.2.
 
 4.1.0 (2014-12-24)
 ==================
 
-- Added support for PyPy.  PyPy3 support is pending a release of fix for
+- Add support for PyPy.  PyPy3 support is pending a release of fix for
   https://bitbucket.org/pypy/pypy/issue/1946).
 
-- Added support for Python 3.4.
+- Add support for Python 3.4.
 
-- Support for testing on Travis.
+- Add support for testing on Travis.
 
 
 4.1.0a1 (2013-02-22)
 ====================
 
-- Added support for Python 3.3.
+- Add support for Python 3.3.
 
 
 4.0.0 (2012-07-04)
@@ -28,19 +28,19 @@ Changes
 
 - Strip noise from context actions in doctests.
 
-  The output is now more meaningful, and hides irrelevant details.
+  Make output is now more meaningful, and hides irrelevant details.
   (forward-compatibility with ``zope.component`` 4.0.0).
 
-- Replaced deprecated ``zope.interface.implements`` usage with equivalent
+- Replace deprecated ``zope.interface.implements`` usage with equivalent
   ``zope.interface.implementer`` decorator.
 
-- Dropped support for Python 2.4 and 2.5.
+- Drop support for Python 2.4 and 2.5.
 
 
 3.9.1 (2010-04-30)
 ==================
 
-- Removed use of 'zope.testing.doctestunit' in favor of stdlib's 'doctest.
+- Remove use of ``zope.testing.doctestunit`` in favor of stdlib's ``doctest``.
 
 3.9.0 (2009-08-27)
 ==================
