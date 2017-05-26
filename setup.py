@@ -16,11 +16,13 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
         return f.read()
 
 long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
+
 
 def alltests():
     import os
@@ -37,12 +39,13 @@ def alltests():
     suites = list(zope.testrunner.find.find_suites(options))
     return unittest.TestSuite(suites)
 
-setup(name='zope.browsermenu',
-      version='4.2.0.dev0',
-      url='http://pypi.python.org/pypi/zope.browsermenu/',
-      author='Zope Foundation and Contributors',
-      author_email='zope-dev@zope.org',
-      classifiers = [
+setup(
+    name='zope.browsermenu',
+    version='4.2.0.dev0',
+    url='http://pypi.python.org/pypi/zope.browsermenu/',
+    author='Zope Foundation and Contributors',
+    author_email='zope-dev@zope.org',
+    classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
@@ -58,14 +61,14 @@ setup(name='zope.browsermenu',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
         'Framework :: Zope3',
-        ],
-      description='Browser menu implementation for Zope.',
-      long_description=long_description,
-      license='ZPL 2.1',
-      packages=find_packages('src'),
-      package_dir={'': 'src'},
-      namespace_packages=['zope'],
-      install_requires=[
+    ],
+    description='Browser menu implementation for Zope.',
+    long_description=long_description,
+    license='ZPL 2.1',
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    namespace_packages=['zope'],
+    install_requires=[
         'setuptools',
         'six',
         'zope.browser',
@@ -78,13 +81,12 @@ setup(name='zope.browsermenu',
         'zope.schema',
         'zope.security',
         'zope.traversing>3.7',
-        ],
-      extras_require={
-          'test': ['zope.testing'],
-          },
-
-      tests_require = ['zope.testing', 'zope.testrunner'],
-      test_suite = '__main__.alltests',
-      include_package_data=True,
-      zip_safe = False,
-      )
+    ],
+    extras_require={
+        'test': ['zope.testing'],
+    },
+    tests_require=['zope.testing', 'zope.testrunner'],
+    test_suite='__main__.alltests',
+    include_package_data=True,
+    zip_safe=False,
+)
