@@ -26,7 +26,7 @@ long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 
 setup(
     name='zope.browsermenu',
-    version='4.2',
+    version='4.3.dev0',
     url='http://pypi.python.org/pypi/zope.browsermenu/',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
