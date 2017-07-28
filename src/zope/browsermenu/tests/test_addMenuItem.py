@@ -13,6 +13,7 @@
 ##############################################################################
 """Test the addMenuItem directive
 
+>>> from zope.browsermenu.metaconfigure import addMenuItem
 >>> context = Context()
 >>> addMenuItem(context, class_=X, title="Add an X",
 ...             permission="zope.ManageContent")
@@ -39,18 +40,18 @@ import unittest
 from doctest import DocTestSuite
 import re
 import pprint
+import io
+
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component.interface import provideInterface
-from zope.browsermenu.metaconfigure import addMenuItem
 from zope.browsermenu.metaconfigure import _checkViewFor
-from .._compat import _u
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    # Py3: Change of location.
-    from io import StringIO
+from zope.configuration.xmlconfig import XMLConfig
+
+import zope.browsermenu
+import zope.component
+from zope.testing import cleanup
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
 
@@ -73,7 +74,7 @@ class Context(object):
     def __init__(self):
         self.actions = []
 
-    def action(self, discriminator, callable, args=(), kw={}, order=0):
+    def action(self, discriminator, callable, args=(), kw=None, order=0):
         if discriminator is None:
             if callable is provideInterface:
                 self.actions.append((callable, args[1])) #name is args[0]
@@ -83,7 +84,7 @@ class Context(object):
             self.actions.append(discriminator)
 
     def __repr__(self):
-        stream = StringIO()
+        stream = io.BytesIO() if str is bytes else io.StringIO()
         pprinter = pprint.PrettyPrinter(stream=stream, width=60)
         pprinter.pprint(self.actions)
         r = stream.getvalue()
@@ -92,6 +93,7 @@ class Context(object):
 
 def test_w_factory():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
     >>> context = Context()
     >>> addMenuItem(context, factory="x.y.z", title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
@@ -112,6 +114,8 @@ def test_w_factory():
 
 def test_w_factory_and_view():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
+
     >>> context = Context()
     >>> addMenuItem(context, factory="x.y.z", title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
@@ -133,6 +137,8 @@ def test_w_factory_and_view():
 
 def test_w_factory_class_view():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
+
     >>> context = Context()
     >>> addMenuItem(context, class_=X, title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
@@ -160,6 +166,8 @@ def test_w_factory_class_view():
 
 def test_w_for_factory():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
+
     >>> context = Context()
     >>> addMenuItem(context, for_=IX, factory="x.y.z", title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
@@ -182,6 +190,8 @@ def test_w_for_factory():
 
 def test_w_factory_layer():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
+
     >>> context = Context()
     >>> addMenuItem(context, factory="x.y.z", title="Add an X", layer=ILayerStub,
     ...             permission="zope.ManageContent", description="blah blah",
@@ -202,6 +212,8 @@ def test_w_factory_layer():
 
 def test_w_for_menu_factory():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
+
     >>> context = Context()
     >>> addMenuItem(context, for_=IX, menu=MenuStub,
     ...             factory="x.y.z", title="Add an X",
@@ -225,10 +237,12 @@ def test_w_for_menu_factory():
 
 def test_w_factory_icon_extra_order():
     """
+    >>> from zope.browsermenu.metaconfigure import addMenuItem
+
     >>> context = Context()
     >>> addMenuItem(context, factory="x.y.z", title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
-    ...             filter="context/foo", icon=_u('/@@/icon.png'), extra='Extra',
+    ...             filter="context/foo", icon=u'/@@/icon.png', extra='Extra',
     ...             order=99)
     >>> context
     [('adapter',
@@ -244,11 +258,6 @@ def test_w_factory_icon_extra_order():
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
     """
 
-from zope.configuration.xmlconfig import XMLConfig
-
-import zope.browsermenu
-import zope.component
-from zope.testing import cleanup
 
 class TestAddMenuItem(cleanup.CleanUp, unittest.TestCase):
 
@@ -263,8 +272,5 @@ class TestAddMenuItem(cleanup.CleanUp, unittest.TestCase):
 def test_suite():
     return unittest.TestSuite((
         DocTestSuite(),
-        unittest.makeSuite(TestAddMenuItem),
-        ))
-
-if __name__ == '__main__':
-    unittest.main()
+        unittest.defaultTestLoader.loadTestsFromName(__name__),
+    ))

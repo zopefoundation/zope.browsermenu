@@ -15,7 +15,7 @@
 """
 import six
 from zope.browser.interfaces import IAdding
-from zope.component import getGlobalSiteManager, getUtility
+from zope.component import getGlobalSiteManager, queryUtility
 from zope.component.interface import provideInterface
 from zope.component.zcml import adapter, proxify, utility
 from zope.configuration.exceptions import ConfigurationError
@@ -30,7 +30,7 @@ from zope.browsermenu.menu import BrowserMenu, BrowserMenuItem, BrowserSubMenuIt
 from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
 from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
 from zope.browsermenu.interfaces import AddMenu
-from ._compat import _u
+
 
 # Create special modules that contain all menu item types
 from types import ModuleType as module
@@ -47,7 +47,7 @@ _order_counter = {}
 
 
 def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
-                  title=_u(''), description=_u('')):
+                  title=u'', description=u''):
     """Registers a new browser menu."""
     if id is None and interface is None:
         raise ConfigurationError(
@@ -80,33 +80,33 @@ def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
             # that other directives can find the interface under the name
             # before the CA is setup.
             _context.action(
-                discriminator = ('browser', 'MenuItemType', path),
-                callable = provideInterface,
-                args = (path, interface, IMenuItemType, _context.info)
-                )
+                discriminator=('browser', 'MenuItemType', path),
+                callable=provideInterface,
+                args=(path, interface, IMenuItemType, _context.info)
+            )
             setattr(menus, id, interface)
 
     # Register the layer interface as an interface
     _context.action(
-        discriminator = ('interface', path),
-        callable = provideInterface,
-        args = (path, interface),
-        kw = {'info': _context.info}
-        )
+        discriminator=('interface', path),
+        callable=provideInterface,
+        args=(path, interface),
+        kw={'info': _context.info}
+    )
 
     # Register the menu item type interface as an IMenuItemType
     _context.action(
-        discriminator = ('browser', 'MenuItemType', id),
-        callable = provideInterface,
-        args = (id, interface, IMenuItemType, _context.info)
-        )
+        discriminator=('browser', 'MenuItemType', id),
+        callable=provideInterface,
+        args=(id, interface, IMenuItemType, _context.info)
+    )
 
     # Register the menu as a utility
     utility(_context, IBrowserMenu, class_(id, title, description), name=id)
 
 
 def menuItemDirective(_context, menu, for_,
-                      action, title, description=_u(''), icon=None, filter=None,
+                      action, title, description=u'', icon=None, filter=None,
                       permission=None, layer=IDefaultBrowserLayer, extra=None,
                       order=0, item_class=None):
     """Register a single menu item."""
@@ -116,7 +116,7 @@ def menuItemDirective(_context, menu, for_,
 
 
 def subMenuItemDirective(_context, menu, for_, title, submenu,
-                         action=_u(''), description=_u(''), icon=None, filter=None,
+                         action=u'', description=u'', icon=None, filter=None,
                          permission=None, layer=IDefaultBrowserLayer,
                          extra=None, order=0, item_class=None):
     """Register a single sub-menu menu item."""
@@ -160,7 +160,7 @@ class menuItemsDirective(object):
         self.layer = layer
         self.permission = permission
 
-    def menuItem(self, _context, action, title, description=_u(''),
+    def menuItem(self, _context, action, title, description=u'',
                  icon=None, filter=None, permission=None, extra=None,
                  order=0, item_class=None):
 
@@ -188,12 +188,10 @@ class menuItemsDirective(object):
         adapter(_context, (factory,), self.menuItemType,
                 (self.for_, self.layer), name=title)
 
-    def subMenuItem(self, _context, submenu, title, description=_u(''),
-                    action=_u(''), icon=None, filter=None, permission=None,
+    def subMenuItem(self, _context, submenu, title, description=u'',
+                    action=u'', icon=None, filter=None, permission=None,
                     extra=None, order=0, item_class=None):
-
-        if filter is not None:
-            filter = Engine.compile(filter)
+        filter = Engine.compile(filter) if filter is not None else None
 
         if permission is None:
             permission = self.permission
@@ -217,8 +215,10 @@ class menuItemsDirective(object):
                 (self.for_, self.layer), name=title)
 
     def __call__(self, _context):
-        # Nothing to do.
-        pass
+        """
+        See menuItem or subMenuItem.
+        """
+
 
 def _checkViewFor(for_=None, layer=None, view_name=None):
     """Check if there is a view of that name registered for IAdding
@@ -231,7 +231,7 @@ def _checkViewFor(for_=None, layer=None, view_name=None):
 
     if view_name is None:
         raise ConfigurationError(
-            "Within a addMenuItem directive the view attribut"
+            "Within a addMenuItem directive the view attribute"
             " is optional but can\'t be empty"
             )
 
@@ -256,10 +256,10 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
 
     if for_ is not None:
         _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = ('', for_)
-            )
+            discriminator=None,
+            callable=provideInterface,
+            args=('', for_)
+        )
         forname = 'For' + for_.getName()
     else:
         for_ = IAdding
@@ -267,9 +267,10 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
 
     if menu is not None:
         if isinstance(menu, six.string_types):
-            menu = getUtility(IMenuItemType, menu)
+            menu_name = menu
+            menu = queryUtility(IMenuItemType, menu)
             if menu is None:
-                raise ValueError("Missing menu id '%s'" % menu)
+                raise ValueError("Missing menu id '%s'" % menu_name)
 
     if class_ is None:
         if factory is None:
@@ -290,15 +291,15 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
         action = view
         # This action will check if the view exists
         _context.action(
-            discriminator = None,
-            callable = _checkViewFor,
-            args = (for_, layer, view),
+            discriminator=None,
+            callable=_checkViewFor,
+            args=(for_, layer, view),
             order=999999
-            )
+        )
     else:
         action = factory
 
-    if menu == None:
+    if menu is None:
         menu = AddMenu
 
     return menuItemsDirective(_context, menu, for_, layer=layer).menuItem(

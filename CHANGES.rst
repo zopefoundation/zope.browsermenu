@@ -1,18 +1,25 @@
-Changes
-=======
-
-4.3 (unreleased)
-================
-
-- Nothing changed yet.
+=========
+ Changes
+=========
 
 
-4.2 (2017-05-28)
-================
+4.3.0 (unreleased)
+==================
+
+- Drop support for Python 3.3.
+
+- Add support for PyPy3 3.5.
+
+- Fix test compatibility with zope.component 4.4.0.
+
+4.2.0 (2017-05-28)
+==================
 
 - Add support for Python 3.5 and 3.6.
 
 - Drop support for Python 2.6 and 3.2.
+
+- Drop support for 'setup.py test'.
 
 4.1.1 (2015-06-05)
 ==================
@@ -29,12 +36,10 @@ Changes
 
 - Add support for testing on Travis.
 
-
 4.1.0a1 (2013-02-22)
 ====================
 
 - Add support for Python 3.3.
-
 
 4.0.0 (2012-07-04)
 ==================
@@ -48,7 +53,6 @@ Changes
   ``zope.interface.implementer`` decorator.
 
 - Drop support for Python 2.4 and 2.5.
-
 
 3.9.1 (2010-04-30)
 ==================

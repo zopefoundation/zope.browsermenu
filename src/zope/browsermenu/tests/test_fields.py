@@ -17,9 +17,29 @@ import unittest
 import doctest
 from zope.testing import cleanup
 
+class TestMenuField(unittest.TestCase):
+
+
+    def test_unconfigured(self):
+        from zope.browsermenu.field import MenuField
+        from zope.configuration.exceptions import ConfigurationError
+        from zope.schema import ValidationError
+
+        class Resolver(object):
+            def resolve(self, name):
+                raise ConfigurationError(name)
+
+        field = MenuField()
+        field = field.bind(Resolver())
+
+        with self.assertRaises(ValidationError):
+            field.fromUnicode(u'')
+
 def test_suite():
     return unittest.TestSuite((
-        doctest.DocTestSuite('zope.browsermenu.field',
-                     setUp=lambda test:cleanup.setUp(),
-                     tearDown=lambda test:cleanup.tearDown()),
-        ))
+        unittest.defaultTestLoader.loadTestsFromName(__name__),
+        doctest.DocTestSuite(
+            'zope.browsermenu.field',
+            setUp=lambda test: cleanup.setUp(),
+            tearDown=lambda test: cleanup.tearDown()),
+    ))

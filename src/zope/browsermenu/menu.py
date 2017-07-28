@@ -29,13 +29,13 @@ from zope.traversing.publicationtraverse import PublicationTraverser
 from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
 from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuAccessView
-from ._compat import _u
+
 
 @implementer(IBrowserMenu)
 class BrowserMenu(object):
     """Browser Menu"""
 
-    def __init__(self, id, title=_u(''), description=_u('')):
+    def __init__(self, id, title=u'', description=u''):
         self.id = id
         self.title = title
         self.description = description
@@ -47,8 +47,8 @@ class BrowserMenu(object):
         """Return menu item entries in a TAL-friendly form."""
 
         result = []
-        for name, item in getAdapters((object, request),
-                                      self.getMenuItemType()):
+        for _name, item in getAdapters((object, request),
+                                       self.getMenuItemType()):
             if item.available():
                 result.append(item)
 
@@ -60,16 +60,14 @@ class BrowserMenu(object):
         ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
         max_key = len(ifaces)
         def iface_index(item):
-            iface = item._for
-            if not iface:
-                iface = Interface
+            iface = item._for or Interface
             if IInterface.providedBy(iface):
                 return ifaces.index(iface)
             if isinstance(removeSecurityProxy(object), item._for):
                 # directly specified for class, this goes first.
                 return -1
             # no idea. This goes last.
-            return max_key
+            return max_key # pragma: no cover
         result = [(iface_index(item), item.order, item.title, item)
                   for item in result]
         result.sort()
@@ -78,7 +76,7 @@ class BrowserMenu(object):
             {'title': title,
              'description': item.description,
              'action': item.action,
-             'selected': (item.selected() and _u('selected')) or _u(''),
+             'selected': (item.selected() and u'selected') or u'',
              'icon': item.icon,
              'extra': item.extra,
              'submenu': (IBrowserSubMenuItem.providedBy(item) and
@@ -92,9 +90,9 @@ class BrowserMenu(object):
 class BrowserMenuItem(BrowserView):
     """Browser Menu Item Class"""
 
-    title = _u('')
-    description = _u('')
-    action = _u('')
+    title = u''
+    description = u''
+    action = u''
     extra = None
     order = 0
     permission = None
@@ -110,7 +108,7 @@ class BrowserMenuItem(BrowserView):
             if not checkPermission(self.permission, self.context):
                 return False
 
-        elif self.action != _u(''):
+        elif self.action != u'':
             # Otherwise, test access by attempting access
             path = self.action
             l = self.action.find('?')
@@ -127,18 +125,18 @@ class BrowserMenuItem(BrowserView):
                 # we're assuming that view pages are callable
                 # this is a pretty sound assumption
                 if not canAccess(view, '__call__'):
-                    return False
+                    return False # pragma: no cover
 
         # Make sure that we really want to see this menu item
         if self.filter is not None:
 
             try:
                 include = self.filter(Engine.getContext(
-                    context = self.context,
-                    nothing = None,
-                    request = self.request,
-                    modules = sys.modules,
-                    ))
+                    context=self.context,
+                    nothing=None,
+                    request=self.request,
+                    modules=sys.modules,
+                ))
             except Unauthorized:
                 return False
             else:
@@ -171,9 +169,7 @@ class BrowserSubMenuItem(BrowserMenuItem):
     submenuId = None
 
     def selected(self):
-        if self.action is _u(''):
-            return False
-        return super(BrowserSubMenuItem, self).selected()
+        return False if self.action == u'' else super(BrowserSubMenuItem, self).selected()
 
 
 def getMenu(id, object, request):
