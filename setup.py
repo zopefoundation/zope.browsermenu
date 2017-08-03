@@ -29,7 +29,7 @@ TESTS_REQUIRE = [
 
 setup(
     name='zope.browsermenu',
-    version='4.3.0',
+    version='4.3.1.dev0',
     url='http://github.com/zopefoundation/zope.browsermenu/',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
