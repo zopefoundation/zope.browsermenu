@@ -16,18 +16,21 @@
 import os
 from setuptools import setup, find_packages
 
-
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
         return f.read()
 
 long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 
+TESTS_REQUIRE = [
+    'zope.testing',
+    'zope.testrunner',
+]
 
 setup(
     name='zope.browsermenu',
-    version='4.3.dev0',
-    url='http://pypi.python.org/pypi/zope.browsermenu/',
+    version='4.3.0.dev0',
+    url='http://github.com/zopefoundation/zope.browsermenu/',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     classifiers=[
@@ -38,7 +41,6 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
@@ -69,9 +71,9 @@ setup(
         'zope.traversing>3.7',
     ],
     extras_require={
-        'test': ['zope.testing'],
+        'test': TESTS_REQUIRE,
     },
-    tests_require=['zope.testing', 'zope.testrunner'],
+    tests_require=TESTS_REQUIRE,
     include_package_data=True,
     zip_safe=False,
 )

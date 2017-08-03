@@ -17,41 +17,44 @@
 import sys
 import os
 import unittest
-from doctest import DocTestSuite
 
 from zope import component
-from zope.interface import Interface, implementer, directlyProvides, providedBy
+from zope.interface import Interface, implementer, directlyProvides
 
 import zope.security.management
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
-from zope.configuration.exceptions import ConfigurationError
+
 from zope.publisher.browser import TestRequest
-from zope.publisher.interfaces.browser import IBrowserPublisher
+
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.browser import IBrowserSkinType
-from zope.security.proxy import removeSecurityProxy, ProxyFactory
-from zope.security.permission import Permission
-from zope.security.interfaces import IPermission
+
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
 
 import zope.browsermenu
-from zope.component.testfiles.views import IC, V1, VZMI, R1, IV
+
 from zope.browsermenu.menu import getFirstMenuItem, BrowserMenu
 from zope.browsermenu.interfaces import IMenuItemType, IBrowserMenu
 from zope.testing import cleanup
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    # Py3: Change of location.
-    from io import StringIO
+from io import StringIO
+
+class IV(Interface):
+    def index():
+        "Return index text"
+
+class IC(Interface):
+    "An interface"
+
+@implementer(IV)
+class V1(object):
+    pass
 
 tests_path = os.path.join(
     os.path.dirname(zope.browsermenu.__file__),
     'tests')
 
-template = """<configure
+template = u"""<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:browser='http://namespaces.zope.org/browser'
    i18n_domain='zope'>
@@ -65,19 +68,10 @@ class M1(BrowserMenu):
     pass
 
 class V2(V1, object):
-
-    def action(self):
-        return self.action2()
-
-    def action2(self):
-        return "done"
+    pass
 
 class VT(V1, object):
-    def publishTraverse(self, request, name):
-        try:
-            return int(name)
-        except:
-            return super(VT, self).publishTraverse(request, name)
+    pass
 
 @implementer(IC)
 class Ob(object):
@@ -88,20 +82,18 @@ ob = Ob()
 class NCV(object):
     "non callable view"
 
-    def __init__(self, context, request):
-        pass
 
 class CV(NCV):
     "callable view"
     def __call__(self):
-        pass
+        raise AssertionError("Not called")
 
 
 @implementer(Interface)
 class C_w_implements(NCV):
 
     def index(self):
-        return self
+        raise AssertionError("Not called")
 
 class ITestMenu(Interface):
     """Test menu."""
@@ -117,10 +109,7 @@ class ITestSkin(ITestLayer):
 
 
 class MyResource(object):
-
-    def __init__(self, request):
-        self.request = request
-
+    pass
 
 class Test(cleanup.CleanUp, unittest.TestCase):
 
@@ -140,7 +129,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             None)
 
         xmlconfig(StringIO(template % (
-            '''
+            u'''
             <browser:menu
                 id="test_menu" title="Test menu" />
             <browser:menuItem
@@ -171,7 +160,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         # <browser:menuItem> directive fails if no 'for' argument was provided
         from zope.configuration.exceptions import ConfigurationError
         self.assertRaises(ConfigurationError, xmlconfig, StringIO(template %
-            '''
+            u'''
             <browser:menu
                 id="test_menu" title="Test menu" />
             <browser:menuItem
@@ -184,7 +173,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
 	    # it works, when the argument is there and a valid interface
         xmlconfig(StringIO(template %
-            '''
+            u'''
             <browser:menuItem
                 for="zope.component.testfiles.views.IC"
                 title="Test Entry"
@@ -195,4 +184,4 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ))
 
 def test_suite():
-    return unittest.makeSuite(Test)
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

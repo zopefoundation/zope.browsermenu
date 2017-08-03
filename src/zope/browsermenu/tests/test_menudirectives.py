@@ -29,7 +29,6 @@ import zope.security
 from zope.testing import cleanup
 
 import zope.browsermenu
-from .._compat import _u
 
 
 template = """<configure
@@ -39,17 +38,22 @@ template = """<configure
    %s
    </configure>"""
 
-class I1(Interface): pass
-class I11(I1): pass
-class I12(I1): pass
-class I111(I11): pass
+class I1(Interface):
+    pass
+class I11(I1):
+    pass
+class I12(I1):
+    pass
+class I111(I11):
+    pass
 
 
 @implementer(I1)
 class C1(object):
     pass
 
-class I2(Interface): pass
+class I2(Interface):
+    pass
 
 @implementer(I2)
 class C2(object):
@@ -59,10 +63,7 @@ class C2(object):
 class TestObject(object):
 
     def f(self):
-        pass
-
-    def browserDefault(self, r):
-        return self, ()
+        raise AssertionError("Never called")
 
     def publishTraverse(self, request, name):
         if name[:1] == 'f':
@@ -96,10 +97,10 @@ class TestPermissions(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual("zope.View", item.permission)
 
 
-class Test(cleanup.CleanUp, unittest.TestCase):
+class TestZCML(cleanup.CleanUp, unittest.TestCase):
 
     def setUp(self):
-        super(Test, self).setUp()
+        super(TestZCML, self).setUp()
         XMLConfig('meta.zcml', zope.browsermenu)()
 
     def testMenusAndMenuItems(self):
@@ -111,7 +112,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         def d(n):
             return {'action': "a%s" % n,
                     'title':  "t%s" % n,
-                    'description': _u(''),
+                    'description': u'',
                     'selected': '',
                     'submenu': None,
                     'icon': None,
@@ -121,17 +122,17 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(
             menu[-1],
             {'submenu': [{'submenu': None,
-                          'description': _u(''),
+                          'description': u'',
                           'extra': None,
-                          'selected': _u(''),
-                          'action': _u('a10'),
-                          'title': _u('t10'),
+                          'selected': u'',
+                          'action': u'a10',
+                          'title': u't10',
                           'icon': None}],
-             'description': _u(''),
+             'description': u'',
              'extra': None,
-             'selected': _u(''),
-             'action': _u(''),
-             'title': _u('s1'),
+             'selected': u'',
+             'action': u'',
+             'title': u's1',
              'icon': None})
 
         first = zope.browsermenu.menu.getFirstMenuItem(
@@ -154,11 +155,50 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             'test_id', TestObject(), TestRequest(skin=IMySkin))
         self.assertEqual(len(menu), 8)
 
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test),
-        unittest.makeSuite(TestPermissions),
-        ))
 
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+class TestFunctional(unittest.TestCase):
+
+    def test_checkViewFor_no_name(self):
+        from zope.browsermenu.metaconfigure import _checkViewFor
+        from zope.configuration.exceptions import ConfigurationError
+
+        with self.assertRaisesRegexp(ConfigurationError,
+                                     "can't be empty"):
+            _checkViewFor()
+
+    def test_checkViewFor_not_registered(self):
+        from zope.browsermenu.metaconfigure import _checkViewFor
+        from zope.configuration.exceptions import ConfigurationError
+
+        with self.assertRaisesRegexp(ConfigurationError,
+                                     "view name"):
+            _checkViewFor(Interface, Interface, view_name=__name__)
+
+    def test_addMenuItem_menu_string_name(self):
+        from zope.browsermenu.metaconfigure import addMenuItem
+        with self.assertRaisesRegexp(ValueError,
+                                     "Missing menu id 'foobar'"):
+            addMenuItem(None, "Title", menu='foobar')
+
+    def test_addMenuItem_no_class_no_factory(self):
+        from zope.browsermenu.metaconfigure import addMenuItem
+        with self.assertRaisesRegexp(ValueError,
+                                     "Must specify either class or factory"):
+            addMenuItem(None, "Title")
+
+    def test_addMenuItem_class_and_factory(self):
+        from zope.browsermenu.metaconfigure import addMenuItem
+        with self.assertRaisesRegexp(ValueError,
+                                     "Can't specify both class and factory"):
+            addMenuItem(None, "Title", class_=self, factory=self)
+
+    def test_addMenuItem_class_no_permission(self):
+        from zope.browsermenu.metaconfigure import addMenuItem
+        with self.assertRaisesRegexp(ValueError,
+                                     "A permission must be specified"):
+            addMenuItem(None, "Title", class_=self, permission=None)
+
+    def test_subMenuItemDirective_type_error(self):
+        from zope.browsermenu.metaconfigure import subMenuItemDirective
+        with self.assertRaises(TypeError):
+            subMenuItemDirective(None, None, Interface, 'title', 'submenu')

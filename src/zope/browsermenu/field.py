@@ -16,7 +16,6 @@
 __docformat__ = 'restructuredtext'
 
 from zope.component import queryUtility
-from zope.component.interfaces import ComponentLookupError
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.fields import GlobalObject
 from zope.schema import ValidationError
@@ -74,7 +73,7 @@ class MenuField(GlobalObject):
 
     Test 3: Get the menu from the Site Manager
     ------------------------------------------
-    
+
     >>> from zope.component import provideUtility
     >>> provideUtility(menu1, IMenuItemType, 'menu1')
 
@@ -85,23 +84,19 @@ class MenuField(GlobalObject):
     def fromUnicode(self, u):
         name = str(u.strip())
 
-        try:
-            value = queryUtility(IMenuItemType, name)
-        except ComponentLookupError:
-            # The component architecture is not up and running.
-            pass
-        else: 
-            if value is not None:
-                self.validate(value)
-                return value
+        # queryUtility can never raise ComponentLookupError
+        value = queryUtility(IMenuItemType, name)
+        if value is not None:
+            self.validate(value)
+            return value
 
         try:
-            value = self.context.resolve('zope.app.menus.'+name)
+            value = self.context.resolve('zope.app.menus.' + name)
         except ConfigurationError as v:
             try:
                 value = self.context.resolve(name)
             except ConfigurationError as v:
                 raise ValidationError(v)
-        
+
         self.validate(value)
         return value
