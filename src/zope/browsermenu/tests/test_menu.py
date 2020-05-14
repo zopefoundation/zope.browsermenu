@@ -37,7 +37,8 @@ checker = renormalizing.RENormalizing([
     # Python 3 adds module name to exceptions.
     (re.compile("zope.configuration.exceptions.ConfigurationError"),
      r"ConfigurationError"),
-    ])
+])
+
 
 class Request(object):
 
@@ -47,12 +48,13 @@ class Request(object):
     def getURL(self):
         return self._url
 
+
 class TestMenuAccessView(unittest.TestCase):
 
     def test_getitem(self):
         v = menu.MenuAccessView(None, None)
         with self.assertRaises(ComponentLookupError):
-            _ = v['id']
+            v['id']
 
 
 class TestBrowserMenuItem(unittest.TestCase):
@@ -77,6 +79,7 @@ class TestBrowserMenuItem(unittest.TestCase):
         item = menu.BrowserMenuItem(None, req)
 
         filter_called = []
+
         def f(_):
             filter_called.append(True)
             raise Unauthorized()

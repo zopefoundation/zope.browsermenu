@@ -26,8 +26,10 @@ class IMenuItemType(IInterface):
     menu items.
     """
 
+
 class AddMenu(Interface):
     """Special menu for providing a list of addable objects."""
+
 
 directlyProvides(AddMenu, IMenuItemType)
 
@@ -44,20 +46,20 @@ class IBrowserMenu(Interface):
         title=_("Menu Id"),
         description=_("The id uniquely identifies this menu."),
         required=True
-        )
+    )
 
     title = TextLine(
         title=_("Menu title"),
         description=_("The title provides the basic label for the menu."),
         required=False
-        )
+    )
 
     description = Text(
         title=_("Menu description"),
         description=_("A description of the menu. This might be shown "
                       "on menu pages or in pop-up help for menus."),
         required=False
-        )
+    )
 
     def getMenuItems(object, request):
         """Return a TAL-friendly list of menu items.
@@ -77,14 +79,14 @@ class IBrowserMenuItem(Interface):
         title=_("Menu item title"),
         description=_("The title provides the basic label for the menu item."),
         required=True
-        )
+    )
 
     description = Text(
         title=_("Menu item description"),
         description=_("A description of the menu item. This might be shown "
                       "on menu pages or in pop-up help for menu items."),
         required=False
-        )
+    )
 
     action = TextLine(
         title=_("The URL to display if the item is selected"),
@@ -92,15 +94,15 @@ class IBrowserMenuItem(Interface):
                       "given in the action is displayed. The action is "
                       "usually given as a relative URL, relative to the "
                       "object the menu item is for."),
-       required=True
-       )
+        required=True
+    )
 
     order = Int(
         title=_("Menu item ordering hint"),
         description=_("This attribute provides a hint for menu item ordering."
                       "Menu items will generally be sorted by the `for_`"
                       "attribute and then by the order.")
-        )
+    )
 
     filter_string = TextLine(
         title=_("A condition for displaying the menu item"),
@@ -121,13 +123,14 @@ class IBrowserMenuItem(Interface):
     icon = URI(
         title=_("Icon URI"),
         description=_("URI of the icon representing this menu item"))
-       
+
     def available():
         """Test whether the menu item should be displayed
-        
+
         A menu item might not be available for an object, for example
         due to security limitations or constraints.
         """
+
 
 class IBrowserSubMenuItem(IBrowserMenuItem):
     """A menu item that points to a sub-menu."""
@@ -137,15 +140,15 @@ class IBrowserSubMenuItem(IBrowserMenuItem):
         description=_("The menu id of the menu that describes the "
                       "sub-menu below this item."),
         required=True)
-        
+
     action = TextLine(
         title=_("The URL to display if the item is selected"),
         description=_("When a user selects a browser menu item, the URL "
                       "given in the action is displayed. The action is "
                       "usually given as a relative URL, relative to the "
                       "object the menu item is for."),
-       required=False
-       )
+        required=False
+    )
 
 
 class IMenuAccessView(Interface):

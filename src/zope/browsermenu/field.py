@@ -13,8 +13,6 @@
 ##############################################################################
 """Menu field
 """
-__docformat__ = 'restructuredtext'
-
 from zope.component import queryUtility
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.fields import GlobalObject
@@ -92,7 +90,7 @@ class MenuField(GlobalObject):
 
         try:
             value = self.context.resolve('zope.app.menus.' + name)
-        except ConfigurationError as v:
+        except ConfigurationError:
             try:
                 value = self.context.resolve(name)
             except ConfigurationError as v:

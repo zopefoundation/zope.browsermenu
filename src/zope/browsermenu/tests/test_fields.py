@@ -17,8 +17,8 @@ import unittest
 import doctest
 from zope.testing import cleanup
 
-class TestMenuField(unittest.TestCase):
 
+class TestMenuField(unittest.TestCase):
 
     def test_unconfigured(self):
         from zope.browsermenu.field import MenuField
@@ -34,6 +34,7 @@ class TestMenuField(unittest.TestCase):
 
         with self.assertRaises(ValidationError):
             field.fromUnicode(u'')
+
 
 def test_suite():
     return unittest.TestSuite((

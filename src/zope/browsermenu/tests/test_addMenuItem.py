@@ -55,14 +55,18 @@ from zope.testing import cleanup
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
 
+
 class IX(Interface):
     pass
+
 
 class X(object):
     pass
 
+
 class ILayerStub(IBrowserRequest):
     pass
+
 
 class MenuStub(object):
     pass
@@ -77,7 +81,7 @@ class Context(object):
     def action(self, discriminator, callable, args=(), kw=None, order=0):
         if discriminator is None:
             if callable is provideInterface:
-                self.actions.append((callable, args[1])) #name is args[0]
+                self.actions.append((callable, args[1]))  # name is args[0]
             elif callable is _checkViewFor:
                 self.actions.append((callable, args[2]))
         else:
@@ -110,7 +114,8 @@ def test_w_factory():
       <InterfaceClass zope.browser.interfaces.IAdding>),
      (<function provideInterface>,
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
-    """
+    """  # noqa: E501 (long line)
+
 
 def test_w_factory_and_view():
     """
@@ -133,7 +138,8 @@ def test_w_factory_and_view():
       <InterfaceClass zope.browser.interfaces.IAdding>),
      (<function provideInterface>,
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
-    """
+    """  # noqa: E501 (long line)
+
 
 def test_w_factory_class_view():
     """
@@ -143,7 +149,6 @@ def test_w_factory_class_view():
     >>> addMenuItem(context, class_=X, title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
     ...             filter="context/foo", view="AddX")
-    >>> import pprint
     >>> context
     [('utility',
       <InterfaceClass zope.component.interfaces.IFactory>,
@@ -162,7 +167,8 @@ def test_w_factory_class_view():
       <InterfaceClass zope.browser.interfaces.IAdding>),
      (<function provideInterface>,
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
-    """
+    """  # noqa: E501 (long line)
+
 
 def test_w_for_factory():
     """
@@ -186,14 +192,16 @@ def test_w_for_factory():
       <InterfaceClass zope.browsermenu.tests.test_addMenuItem.IX>),
      (<function provideInterface>,
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
-    """
+    """  # noqa: E501 (long line)
+
 
 def test_w_factory_layer():
     """
     >>> from zope.browsermenu.metaconfigure import addMenuItem
 
     >>> context = Context()
-    >>> addMenuItem(context, factory="x.y.z", title="Add an X", layer=ILayerStub,
+    >>> addMenuItem(context, factory="x.y.z", title="Add an X",
+    ...             layer=ILayerStub,
     ...             permission="zope.ManageContent", description="blah blah",
     ...             filter="context/foo")
     >>> context
@@ -209,6 +217,7 @@ def test_w_factory_layer():
      (<function provideInterface>,
       <InterfaceClass zope.browsermenu.tests.test_addMenuItem.ILayerStub>)]
     """
+
 
 def test_w_for_menu_factory():
     """
@@ -233,7 +242,8 @@ def test_w_for_menu_factory():
       <InterfaceClass zope.browsermenu.tests.test_addMenuItem.IX>),
      (<function provideInterface>,
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
-    """
+    """  # noqa: E501 (long line)
+
 
 def test_w_factory_icon_extra_order():
     """
@@ -256,7 +266,7 @@ def test_w_factory_icon_extra_order():
       <InterfaceClass zope.browser.interfaces.IAdding>),
      (<function provideInterface>,
       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
-    """
+    """  # noqa: E501 (long line)
 
 
 class TestAddMenuItem(cleanup.CleanUp, unittest.TestCase):
@@ -268,6 +278,7 @@ class TestAddMenuItem(cleanup.CleanUp, unittest.TestCase):
 
     def test_addMenuItemDirectives(self):
         XMLConfig('tests/addmenuitems.zcml', zope.browsermenu)()
+
 
 def test_suite():
     return unittest.TestSuite((

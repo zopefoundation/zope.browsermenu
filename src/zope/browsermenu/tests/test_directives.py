@@ -39,20 +39,26 @@ from zope.testing import cleanup
 
 from io import StringIO
 
+
 class IV(Interface):
+
     def index():
-        "Return index text"
+        """Return index text"""
+
 
 class IC(Interface):
-    "An interface"
+    """An interface"""
+
 
 @implementer(IV)
 class V1(object):
     pass
 
+
 tests_path = os.path.join(
     os.path.dirname(zope.browsermenu.__file__),
     'tests')
+
 
 template = u"""<configure
    xmlns='http://namespaces.zope.org/zope'
@@ -64,27 +70,34 @@ template = u"""<configure
 
 request = TestRequest()
 
+
 class M1(BrowserMenu):
     pass
+
 
 class V2(V1, object):
     pass
 
+
 class VT(V1, object):
     pass
+
 
 @implementer(IC)
 class Ob(object):
     pass
 
+
 ob = Ob()
 
+
 class NCV(object):
-    "non callable view"
+    """non callable view"""
 
 
 class CV(NCV):
-    "callable view"
+    """callable view"""
+
     def __call__(self):
         raise AssertionError("Not called")
 
@@ -95,8 +108,10 @@ class C_w_implements(NCV):
     def index(self):
         raise AssertionError("Not called")
 
+
 class ITestMenu(Interface):
     """Test menu."""
+
 
 directlyProvides(ITestMenu, IMenuItemType)
 
@@ -104,12 +119,14 @@ directlyProvides(ITestMenu, IMenuItemType)
 class ITestLayer(IBrowserRequest):
     """Test Layer."""
 
+
 class ITestSkin(ITestLayer):
     """Test Skin."""
 
 
 class MyResource(object):
     pass
+
 
 class Test(cleanup.CleanUp, unittest.TestCase):
 
@@ -140,7 +157,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 title="Test View"
                 />
             '''
-            )))
+        )))
         menu1 = component.getUtility(IBrowserMenu, 'test_menu')
         menuItem1 = getFirstMenuItem('test_menu', ob, TestRequest())
         xmlconfig(StringIO(template % (
@@ -149,30 +166,34 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 id="test_menu" title="Test menu"
                 class="zope.browsermenu.tests.test_directives.M1" />
             '''
-            )))
+        )))
         menu2 = component.getUtility(IBrowserMenu, 'test_menu')
         menuItem2 = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertNotEqual(menu1, menu2)
         self.assertEqual(menuItem1, menuItem2)
 
-
     def testMenuItemNeedsFor(self):
         # <browser:menuItem> directive fails if no 'for' argument was provided
         from zope.configuration.exceptions import ConfigurationError
-        self.assertRaises(ConfigurationError, xmlconfig, StringIO(template %
-            u'''
-            <browser:menu
-                id="test_menu" title="Test menu" />
-            <browser:menuItem
-                title="Test Entry"
-                menu="test_menu"
-                action="@@test"
-            />
-            '''
+        self.assertRaises(
+            ConfigurationError,
+            xmlconfig,
+            StringIO(
+                template %
+                u'''
+                <browser:menu
+                    id="test_menu" title="Test menu" />
+                <browser:menuItem
+                    title="Test Entry"
+                    menu="test_menu"
+                    action="@@test"
+                />
+                '''
             ))
 
-	    # it works, when the argument is there and a valid interface
-        xmlconfig(StringIO(template %
+        # it works, when the argument is there and a valid interface
+        xmlconfig(StringIO(
+            template %
             u'''
             <browser:menuItem
                 for="zope.component.testfiles.views.IC"
@@ -181,7 +202,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 action="@@test"
             />
             '''
-            ))
+        ))
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

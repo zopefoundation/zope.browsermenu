@@ -26,7 +26,8 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
 from zope.security.metaconfigure import ClassDirective
 
-from zope.browsermenu.menu import BrowserMenu, BrowserMenuItem, BrowserSubMenuItem
+from zope.browsermenu.menu import BrowserMenu, BrowserMenuItem
+from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
 from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
 from zope.browsermenu.interfaces import AddMenu
@@ -36,8 +37,8 @@ from zope.browsermenu.interfaces import AddMenu
 from types import ModuleType as module
 import sys
 try:
-    import zope.app
-except ImportError: # we doesn't always have zope.app now
+    import zope.app  # noqa: F401 (unused symbol)
+except ImportError:  # we don't always have zope.app now
     sys.modules['zope.app'] = module('app')
 menus = module('menus')
 sys.modules['zope.app.menus'] = menus
@@ -48,7 +49,7 @@ _order_counter = {}
 
 def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
                   title=u'', description=u''):
-    """Registers a new browser menu."""
+    """Register a new browser menu."""
     if id is None and interface is None:
         raise ConfigurationError(
             "You must specify the 'id' or 'interface' attribute.")
@@ -60,11 +61,11 @@ def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
             interface = getattr(menus, id)
         else:
             interface = InterfaceClass(id, (),
-                                       __doc__='Menu Item Type: %s' %id,
+                                       __doc__='Menu Item Type: %s' % id,
                                        __module__='zope.app.menus')
             # Add the menu item type to the `menus` module.
-            # Note: We have to do this immediately, so that directives using the
-            # MenuField can find the menu item type.
+            # Note: We have to do this immediately, so that directives using
+            # the MenuField can find the menu item type.
             setattr(menus, id, interface)
         path = 'zope.app.menus.' + id
     else:
@@ -178,7 +179,8 @@ class menuItemsDirective(object):
             item_class = self.menuItemClass
 
         if not IBrowserMenuItem.implementedBy(item_class):
-            raise ValueError("Item class (%s) must implement IBrowserMenuItem" % item_class)
+            raise ValueError(
+                "Item class (%s) must implement IBrowserMenuItem" % item_class)
 
         factory = MenuItemFactory(
             item_class,
@@ -204,7 +206,9 @@ class menuItemsDirective(object):
             item_class = self.subMenuItemClass
 
         if not IBrowserSubMenuItem.implementedBy(item_class):
-            raise ValueError("Item class (%s) must implement IBrowserSubMenuItem" % item_class)
+            raise ValueError(
+                "Item class (%s) must implement IBrowserSubMenuItem"
+                % item_class)
 
         factory = MenuItemFactory(
             item_class,
@@ -215,9 +219,7 @@ class menuItemsDirective(object):
                 (self.for_, self.layer), name=title)
 
     def __call__(self, _context):
-        """
-        See menuItem or subMenuItem.
-        """
+        """See menuItem or subMenuItem."""
 
 
 def _checkViewFor(for_=None, layer=None, view_name=None):
@@ -228,19 +230,19 @@ def _checkViewFor(for_=None, layer=None, view_name=None):
         o view=""
         o if view_name is not registred
     """
-
     if view_name is None:
         raise ConfigurationError(
             "Within a addMenuItem directive the view attribute"
             " is optional but can\'t be empty"
-            )
+        )
 
     gsm = getGlobalSiteManager()
     if gsm.adapters.lookup((for_, layer),
                            Interface, view_name) is None:
         raise ConfigurationError(
-            "view name %s not found " %view_name
-            )
+            "view name %s not found " % view_name
+        )
+
 
 def addMenuItem(_context, title, description='', menu=None, for_=None,
                 class_=None, factory=None, view=None, icon=None, filter=None,
@@ -253,7 +255,6 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
     case, the factory id is based on the class name.
 
     """
-
     if for_ is not None:
         _context.action(
             discriminator=None,

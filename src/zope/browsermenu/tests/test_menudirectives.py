@@ -38,12 +38,19 @@ template = """<configure
    %s
    </configure>"""
 
+
 class I1(Interface):
     pass
+
+
 class I11(I1):
     pass
+
+
 class I12(I1):
     pass
+
+
 class I111(I11):
     pass
 
@@ -52,12 +59,15 @@ class I111(I11):
 class C1(object):
     pass
 
+
 class I2(Interface):
     pass
+
 
 @implementer(I2)
 class C2(object):
     pass
+
 
 @implementer(IBrowserPublisher, I111)
 class TestObject(object):
@@ -72,8 +82,10 @@ class TestObject(object):
             raise Unauthorized(name)
         return self.f
 
+
 class IMyLayer(Interface):
     pass
+
 
 class IMySkin(IMyLayer, IDefaultBrowserLayer):
     pass
@@ -111,7 +123,7 @@ class TestZCML(cleanup.CleanUp, unittest.TestCase):
 
         def d(n):
             return {'action': "a%s" % n,
-                    'title':  "t%s" % n,
+                    'title': "t%s" % n,
                     'description': u'',
                     'selected': '',
                     'submenu': None,

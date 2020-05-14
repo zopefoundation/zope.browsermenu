@@ -13,7 +13,6 @@
 ##############################################################################
 """Menu implementation code
 """
-__docformat__ = "reStructuredText"
 import sys
 
 from zope.component import getAdapters, getUtility
@@ -45,7 +44,6 @@ class BrowserMenu(object):
 
     def getMenuItems(self, object, request):
         """Return menu item entries in a TAL-friendly form."""
-
         result = []
         for _name, item in getAdapters((object, request),
                                        self.getMenuItemType()):
@@ -59,6 +57,7 @@ class BrowserMenu(object):
         # (2) Sort unambigious entries by order and then by title.
         ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
         max_key = len(ifaces)
+
         def iface_index(item):
             iface = item._for or Interface
             if IInterface.providedBy(iface):
@@ -67,7 +66,7 @@ class BrowserMenu(object):
                 # directly specified for class, this goes first.
                 return -1
             # no idea. This goes last.
-            return max_key # pragma: no cover
+            return max_key  # pragma: no cover
         result = [(iface_index(item), item.order, item.title, item)
                   for item in result]
         result.sort()
@@ -111,9 +110,9 @@ class BrowserMenuItem(BrowserView):
         elif self.action != u'':
             # Otherwise, test access by attempting access
             path = self.action
-            l = self.action.find('?')
-            if l >= 0:
-                path = self.action[:l]
+            pos = self.action.find('?')
+            if pos >= 0:
+                path = self.action[:pos]
 
             traverser = PublicationTraverser()
             try:
@@ -125,7 +124,7 @@ class BrowserMenuItem(BrowserView):
                 # we're assuming that view pages are callable
                 # this is a pretty sound assumption
                 if not canAccess(view, '__call__'):
-                    return False # pragma: no cover
+                    return False  # pragma: no cover
 
         # Make sure that we really want to see this menu item
         if self.filter is not None:
@@ -152,11 +151,11 @@ class BrowserMenuItem(BrowserView):
         if self.action.startswith('@@'):
             normalized_action = self.action[2:]
 
-        if request_url.endswith('/'+normalized_action):
+        if request_url.endswith('/' + normalized_action):
             return True
-        if request_url.endswith('/++view++'+normalized_action):
+        if request_url.endswith('/++view++' + normalized_action):
             return True
-        if request_url.endswith('/@@'+normalized_action):
+        if request_url.endswith('/@@' + normalized_action):
             return True
 
         return False
@@ -169,7 +168,10 @@ class BrowserSubMenuItem(BrowserMenuItem):
     submenuId = None
 
     def selected(self):
-        return False if self.action == u'' else super(BrowserSubMenuItem, self).selected()
+        if self.action == u'':
+            return False
+        else:
+            return super(BrowserSubMenuItem, self).selected()
 
 
 def getMenu(id, object, request):
