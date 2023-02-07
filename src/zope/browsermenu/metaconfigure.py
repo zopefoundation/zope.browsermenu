@@ -17,8 +17,6 @@ import sys
 # Create special modules that contain all menu item types
 from types import ModuleType as module
 
-import six
-
 from zope.browser.interfaces import IAdding
 from zope.component import getGlobalSiteManager
 from zope.component import queryUtility
@@ -57,7 +55,7 @@ _order_counter = {}
 
 
 def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
-                  title=u'', description=u''):
+                  title='', description=''):
     """Register a new browser menu."""
     if id is None and interface is None:
         raise ConfigurationError(
@@ -116,7 +114,7 @@ def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
 
 
 def menuItemDirective(_context, menu, for_,
-                      action, title, description=u'', icon=None, filter=None,
+                      action, title, description='', icon=None, filter=None,
                       permission=None, layer=IDefaultBrowserLayer, extra=None,
                       order=0, item_class=None):
     """Register a single menu item."""
@@ -126,7 +124,7 @@ def menuItemDirective(_context, menu, for_,
 
 
 def subMenuItemDirective(_context, menu, for_, title, submenu,
-                         action=u'', description=u'', icon=None, filter=None,
+                         action='', description='', icon=None, filter=None,
                          permission=None, layer=IDefaultBrowserLayer,
                          extra=None, order=0, item_class=None):
     """Register a single sub-menu menu item."""
@@ -135,7 +133,7 @@ def subMenuItemDirective(_context, menu, for_, title, submenu,
         permission, extra, order, item_class)
 
 
-class MenuItemFactory(object):
+class MenuItemFactory:
     """generic factory for menu items."""
 
     def __init__(self, factory, **kwargs):
@@ -157,7 +155,7 @@ class MenuItemFactory(object):
         return item
 
 
-class menuItemsDirective(object):
+class menuItemsDirective:
     """Register several menu items for a particular menu."""
 
     menuItemClass = BrowserMenuItem
@@ -170,7 +168,7 @@ class menuItemsDirective(object):
         self.layer = layer
         self.permission = permission
 
-    def menuItem(self, _context, action, title, description=u'',
+    def menuItem(self, _context, action, title, description='',
                  icon=None, filter=None, permission=None, extra=None,
                  order=0, item_class=None):
 
@@ -199,8 +197,8 @@ class menuItemsDirective(object):
         adapter(_context, (factory,), self.menuItemType,
                 (self.for_, self.layer), name=title)
 
-    def subMenuItem(self, _context, submenu, title, description=u'',
-                    action=u'', icon=None, filter=None, permission=None,
+    def subMenuItem(self, _context, submenu, title, description='',
+                    action='', icon=None, filter=None, permission=None,
                     extra=None, order=0, item_class=None):
         filter = Engine.compile(filter) if filter is not None else None
 
@@ -276,7 +274,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
         forname = ''
 
     if menu is not None:
-        if isinstance(menu, six.string_types):
+        if isinstance(menu, str):
             menu_name = menu
             menu = queryUtility(IMenuItemType, menu)
             if menu is None:
@@ -291,7 +289,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
         if permission is None:
             raise ValueError(
                 "A permission must be specified when a class is used")
-        factory = "BrowserAdd%s__%s.%s" % (
+        factory = "BrowserAdd{}__{}.{}".format(
             forname, class_.__module__, class_.__name__)
         ClassDirective(_context, class_).factory(_context, id=factory)
 

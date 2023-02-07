@@ -322,7 +322,7 @@ menu now:
     'extra': None,
     'icon': None,
     'selected': '',
-    'submen': [{'action': 'saveall.html',
+    'submenu': [{'action': 'saveall.html',
                  'description': '',
                  'extra': None,
                  'icon': None,
@@ -530,8 +530,8 @@ Possibility 3: Specify an interface and an id
   >>> metaconfigure.menuDirective(context, id='menu1', interface=menu1)
 
   >>> pprint([action['discriminator'] for action in context.actions])
-  [('browser', 'MenuItemType', '__builtin__.menu1'),
-   ('interface', '__builtin__.menu1'),
+  [('browser', 'MenuItemType', 'builtins.menu1'),
+   ('interface', 'builtins.menu1'),
    ('browser', 'MenuItemType', 'menu1'),
    ('utility',
     <InterfaceClass zope.browsermenu.interfaces.IBrowserMenu>,
@@ -544,12 +544,12 @@ Here are some disallowed configurations.
   >>> metaconfigure.menuDirective(context)
   Traceback (most recent call last):
   ...
-  ConfigurationError: You must specify the 'id' or 'interface' attribute.
+  zope.configuration.exceptions.ConfigurationError: You must specify the 'id' or 'interface' attribute.
 
   >>> metaconfigure.menuDirective(context, title='Menu 1')
   Traceback (most recent call last):
   ...
-  ConfigurationError: You must specify the 'id' or 'interface' attribute.
+  zope.configuration.exceptions.ConfigurationError: You must specify the 'id' or 'interface' attribute.
 
 
 ``menuItems`` Directive Handler
@@ -574,14 +574,14 @@ Register several menu items for a particular menu.
   ...                if action['discriminator'] is not None])
   >>> pprint(disc[-2:])
   [('adapter',
-    (<InterfaceClass __builtin__.ITest>,
+    (<InterfaceClass builtins.ITest>,
      <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
-    <InterfaceClass __builtin__.TestMenuItemType>,
+    <InterfaceClass builtins.TestMenuItemType>,
     'Save'),
    ('adapter',
-    (<InterfaceClass __builtin__.ITest>,
+    (<InterfaceClass builtins.ITest>,
      <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
-    <InterfaceClass __builtin__.TestMenuItemType>,
+    <InterfaceClass builtins.TestMenuItemType>,
     'View')]
 
 Custom menu item classes
@@ -625,9 +625,9 @@ implement ``IBrowserMenuItem``/``IBrowserSubMenuItem``:
   >>> items.menuItem(context, 'fail', 'Failed', item_class=object)
   Traceback (most recent call last):
   ...
-  ValueError: Item class (<type 'object'>) must implement IBrowserMenuItem
+  ValueError: Item class (<class 'object'>) must implement IBrowserMenuItem
 
   >>> items.subMenuItem(context, SaveOptions, 'Failed', item_class=object)
   Traceback (most recent call last):
   ...
-  ValueError: Item class (<type 'object'>) must implement IBrowserSubMenuItem
+  ValueError: Item class (<class 'object'>) must implement IBrowserSubMenuItem

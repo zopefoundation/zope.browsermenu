@@ -35,7 +35,7 @@ setup(
     version='5.0.dev0',
     url='http://github.com/zopefoundation/zope.browsermenu/',
     author='Zope Foundation and Contributors',
-    author_email='zope-dev@zope.org',
+    author_email='zope-dev@zope.dev',
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -59,12 +59,9 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['zope'],
-    python_requires=','.join([
-        '>=3.7',
-    ]),
+    python_requires='>=3.7',
     install_requires=[
         'setuptools',
-        'six',
         'zope.browser',
         'zope.component>=3.7',
         'zope.configuration',
@@ -79,7 +76,6 @@ setup(
     extras_require={
         'test': TESTS_REQUIRE,
     },
-    tests_require=TESTS_REQUIRE,
     include_package_data=True,
     zip_safe=False,
 )

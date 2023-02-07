@@ -27,7 +27,7 @@ class TestMenuField(unittest.TestCase):
 
         from zope.browsermenu.field import MenuField
 
-        class Resolver(object):
+        class Resolver:
             def resolve(self, name):
                 raise ConfigurationError(name)
 
@@ -35,7 +35,7 @@ class TestMenuField(unittest.TestCase):
         field = field.bind(Resolver())
 
         with self.assertRaises(ValidationError):
-            field.fromUnicode(u'')
+            field.fromUnicode('')
 
 
 def test_suite():

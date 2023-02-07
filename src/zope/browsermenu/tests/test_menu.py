@@ -15,35 +15,15 @@
 """
 import doctest
 import pprint
-import re
 import unittest
 
 from zope.component import ComponentLookupError
 from zope.testing import cleanup
-from zope.testing import renormalizing
 
 from zope.browsermenu import menu
 
 
-checker = renormalizing.RENormalizing([
-    # Python 3 unicode removed the "u".
-    (re.compile("u('.*?')"),
-     r"\1"),
-    (re.compile('u(".*?")'),
-     r"\1"),
-    # Python 3 changed builtins name.
-    (re.compile('__builtin__'),
-     r"builtins"),
-    # Python 3 renamed type to class.
-    (re.compile('<type'),
-     r"<class"),
-    # Python 3 adds module name to exceptions.
-    (re.compile("zope.configuration.exceptions.ConfigurationError"),
-     r"ConfigurationError"),
-])
-
-
-class Request(object):
+class Request:
 
     def __init__(self, url):
         self._url = url
@@ -101,6 +81,5 @@ def test_suite():
             setUp=lambda test: cleanup.setUp(),
             tearDown=lambda test: cleanup.tearDown(),
             globs={'pprint': pprint.pprint},
-            checker=checker,
             optionflags=doctest.NORMALIZE_WHITESPACE),
     ))

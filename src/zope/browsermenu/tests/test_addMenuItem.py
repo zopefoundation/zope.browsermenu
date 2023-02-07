@@ -60,7 +60,7 @@ class IX(Interface):
     pass
 
 
-class X(object):
+class X:
     pass
 
 
@@ -68,11 +68,11 @@ class ILayerStub(IBrowserRequest):
     pass
 
 
-class MenuStub(object):
+class MenuStub:
     pass
 
 
-class Context(object):
+class Context:
     info = ''
 
     def __init__(self):
@@ -272,7 +272,7 @@ def test_w_factory_icon_extra_order():
 class TestAddMenuItem(cleanup.CleanUp, unittest.TestCase):
 
     def setUp(self):
-        super(TestAddMenuItem, self).setUp()
+        super().setUp()
         XMLConfig('meta.zcml', zope.component)()
         XMLConfig('meta.zcml', zope.browsermenu)()
 

@@ -38,10 +38,10 @@ from zope.browsermenu.interfaces import IMenuItemType
 
 
 @implementer(IBrowserMenu)
-class BrowserMenu(object):
+class BrowserMenu:
     """Browser Menu"""
 
-    def __init__(self, id, title=u'', description=u''):
+    def __init__(self, id, title='', description=''):
         self.id = id
         self.title = title
         self.description = description
@@ -82,7 +82,7 @@ class BrowserMenu(object):
             {'title': title,
              'description': item.description,
              'action': item.action,
-             'selected': (item.selected() and u'selected') or u'',
+             'selected': (item.selected() and 'selected') or '',
              'icon': item.icon,
              'extra': item.extra,
              'submenu': (IBrowserSubMenuItem.providedBy(item) and
@@ -96,9 +96,9 @@ class BrowserMenu(object):
 class BrowserMenuItem(BrowserView):
     """Browser Menu Item Class"""
 
-    title = u''
-    description = u''
-    action = u''
+    title = ''
+    description = ''
+    action = ''
     extra = None
     order = 0
     permission = None
@@ -114,7 +114,7 @@ class BrowserMenuItem(BrowserView):
             if not checkPermission(self.permission, self.context):
                 return False
 
-        elif self.action != u'':
+        elif self.action != '':
             # Otherwise, test access by attempting access
             path = self.action
             pos = self.action.find('?')
@@ -175,10 +175,10 @@ class BrowserSubMenuItem(BrowserMenuItem):
     submenuId = None
 
     def selected(self):
-        if self.action == u'':
+        if self.action == '':
             return False
         else:
-            return super(BrowserSubMenuItem, self).selected()
+            return super().selected()
 
 
 def getMenu(id, object, request):
