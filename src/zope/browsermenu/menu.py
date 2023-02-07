@@ -15,19 +15,26 @@
 """
 import sys
 
-from zope.component import getAdapters, getUtility
-from zope.interface import Interface, implementer, providedBy
+from zope.component import getAdapters
+from zope.component import getUtility
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.interface import providedBy
 from zope.interface.interfaces import IInterface
 from zope.pagetemplate.engine import Engine
 from zope.publisher.browser import BrowserView
-from zope.security import canAccess, checkPermission
-from zope.security.interfaces import Forbidden, Unauthorized
+from zope.security import canAccess
+from zope.security import checkPermission
+from zope.security.interfaces import Forbidden
+from zope.security.interfaces import Unauthorized
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.publicationtraverse import PublicationTraverser
 
-from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
-from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
+from zope.browsermenu.interfaces import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserMenuItem
+from zope.browsermenu.interfaces import IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuAccessView
+from zope.browsermenu.interfaces import IMenuItemType
 
 
 @implementer(IBrowserMenu)

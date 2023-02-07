@@ -14,9 +14,13 @@
 """Menu-specific interfaces
 """
 from zope.i18nmessageid import ZopeMessageFactory as _
-from zope.interface import Interface, directlyProvides
+from zope.interface import Interface
+from zope.interface import directlyProvides
 from zope.interface.interfaces import IInterface
-from zope.schema import TextLine, Text, URI, Int
+from zope.schema import URI
+from zope.schema import Int
+from zope.schema import Text
+from zope.schema import TextLine
 
 
 class IMenuItemType(IInterface):

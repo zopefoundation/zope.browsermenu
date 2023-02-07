@@ -36,22 +36,22 @@
   <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
 """
 
+import io
+import pprint
+import re
 import unittest
 from doctest import DocTestSuite
-import re
-import pprint
-import io
 
+import zope.component
+from zope.component.interface import provideInterface
+from zope.configuration.xmlconfig import XMLConfig
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.component.interface import provideInterface
-from zope.browsermenu.metaconfigure import _checkViewFor
-
-from zope.configuration.xmlconfig import XMLConfig
+from zope.testing import cleanup
 
 import zope.browsermenu
-import zope.component
-from zope.testing import cleanup
+from zope.browsermenu.metaconfigure import _checkViewFor
+
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
 

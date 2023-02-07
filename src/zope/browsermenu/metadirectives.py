@@ -13,10 +13,13 @@
 ##############################################################################
 """Menu ZCML directives
 """
-from zope.interface import Interface
-from zope.configuration.fields import GlobalObject, GlobalInterface
+from zope.configuration.fields import GlobalInterface
+from zope.configuration.fields import GlobalObject
 from zope.configuration.fields import MessageID
-from zope.schema import TextLine, Id, Int
+from zope.interface import Interface
+from zope.schema import Id
+from zope.schema import Int
+from zope.schema import TextLine
 from zope.security.zcml import Permission
 
 from zope.browsermenu.field import MenuField

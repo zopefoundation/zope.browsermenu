@@ -15,20 +15,20 @@
 """
 import unittest
 
+import zope.component
+import zope.security
 from zope.configuration.xmlconfig import XMLConfig
-from zope.interface import Interface, implementer
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.browsermenu.interfaces import IBrowserMenu
-from zope.security.interfaces import Unauthorized, Forbidden
-import zope.component
-
-import zope.security
-
+from zope.security.interfaces import Forbidden
+from zope.security.interfaces import Unauthorized
 from zope.testing import cleanup
 
 import zope.browsermenu
+from zope.browsermenu.interfaces import IBrowserMenu
 
 
 template = """<configure
@@ -171,16 +171,18 @@ class TestZCML(cleanup.CleanUp, unittest.TestCase):
 class TestFunctional(unittest.TestCase):
 
     def test_checkViewFor_no_name(self):
-        from zope.browsermenu.metaconfigure import _checkViewFor
         from zope.configuration.exceptions import ConfigurationError
+
+        from zope.browsermenu.metaconfigure import _checkViewFor
 
         with self.assertRaisesRegexp(ConfigurationError,
                                      "can't be empty"):
             _checkViewFor()
 
     def test_checkViewFor_not_registered(self):
-        from zope.browsermenu.metaconfigure import _checkViewFor
         from zope.configuration.exceptions import ConfigurationError
+
+        from zope.browsermenu.metaconfigure import _checkViewFor
 
         with self.assertRaisesRegexp(ConfigurationError,
                                      "view name"):

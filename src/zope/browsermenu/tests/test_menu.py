@@ -17,10 +17,13 @@ import doctest
 import pprint
 import re
 import unittest
-from zope.testing import cleanup, renormalizing
 
 from zope.component import ComponentLookupError
+from zope.testing import cleanup
+from zope.testing import renormalizing
+
 from zope.browsermenu import menu
+
 
 checker = renormalizing.RENormalizing([
     # Python 3 unicode removed the "u".

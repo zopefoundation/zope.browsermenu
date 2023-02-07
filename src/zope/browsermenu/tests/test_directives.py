@@ -14,30 +14,29 @@
 """'browser' namespace directive tests
 """
 
-import sys
 import os
+import sys
 import unittest
-
-from zope import component
-from zope.interface import Interface, implementer, directlyProvides
+from io import StringIO
 
 import zope.security.management
-from zope.configuration.xmlconfig import xmlconfig, XMLConfig
-
+from zope.configuration.xmlconfig import XMLConfig
+from zope.configuration.xmlconfig import xmlconfig
+from zope.interface import Interface
+from zope.interface import directlyProvides
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
-
 from zope.publisher.interfaces.browser import IBrowserRequest
-
+from zope.testing import cleanup
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
 
 import zope.browsermenu
-
-from zope.browsermenu.menu import getFirstMenuItem, BrowserMenu
-from zope.browsermenu.interfaces import IMenuItemType, IBrowserMenu
-from zope.testing import cleanup
-
-from io import StringIO
+from zope import component
+from zope.browsermenu.interfaces import IBrowserMenu
+from zope.browsermenu.interfaces import IMenuItemType
+from zope.browsermenu.menu import BrowserMenu
+from zope.browsermenu.menu import getFirstMenuItem
 
 
 class IV(Interface):

@@ -13,29 +13,38 @@
 ##############################################################################
 """Menu Directives Configuration Handlers
 """
+import sys
+# Create special modules that contain all menu item types
+from types import ModuleType as module
+
 import six
+
 from zope.browser.interfaces import IAdding
-from zope.component import getGlobalSiteManager, queryUtility
+from zope.component import getGlobalSiteManager
+from zope.component import queryUtility
 from zope.component.interface import provideInterface
-from zope.component.zcml import adapter, proxify, utility
+from zope.component.zcml import adapter
+from zope.component.zcml import proxify
+from zope.component.zcml import utility
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import Interface
 from zope.interface.interface import InterfaceClass
 from zope.pagetemplate.engine import Engine
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.security.checker import InterfaceChecker, CheckerPublic
+from zope.security.checker import CheckerPublic
+from zope.security.checker import InterfaceChecker
 from zope.security.metaconfigure import ClassDirective
 
-from zope.browsermenu.menu import BrowserMenu, BrowserMenuItem
-from zope.browsermenu.menu import BrowserSubMenuItem
-from zope.browsermenu.interfaces import IBrowserMenu, IMenuItemType
-from zope.browsermenu.interfaces import IBrowserMenuItem, IBrowserSubMenuItem
 from zope.browsermenu.interfaces import AddMenu
+from zope.browsermenu.interfaces import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserMenuItem
+from zope.browsermenu.interfaces import IBrowserSubMenuItem
+from zope.browsermenu.interfaces import IMenuItemType
+from zope.browsermenu.menu import BrowserMenu
+from zope.browsermenu.menu import BrowserMenuItem
+from zope.browsermenu.menu import BrowserSubMenuItem
 
 
-# Create special modules that contain all menu item types
-from types import ModuleType as module
-import sys
 try:
     import zope.app  # noqa: F401 (unused symbol)
 except ImportError:  # we don't always have zope.app now

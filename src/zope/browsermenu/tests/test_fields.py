@@ -13,17 +13,19 @@
 ##############################################################################
 """Test fields.
 """
-import unittest
 import doctest
+import unittest
+
 from zope.testing import cleanup
 
 
 class TestMenuField(unittest.TestCase):
 
     def test_unconfigured(self):
-        from zope.browsermenu.field import MenuField
         from zope.configuration.exceptions import ConfigurationError
         from zope.schema import ValidationError
+
+        from zope.browsermenu.field import MenuField
 
         class Resolver(object):
             def resolve(self, name):
