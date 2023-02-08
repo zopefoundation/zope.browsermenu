@@ -13,10 +13,13 @@
 ##############################################################################
 """Menu ZCML directives
 """
-from zope.interface import Interface
-from zope.configuration.fields import GlobalObject, GlobalInterface
+from zope.configuration.fields import GlobalInterface
+from zope.configuration.fields import GlobalObject
 from zope.configuration.fields import MessageID
-from zope.schema import TextLine, Id, Int
+from zope.interface import Interface
+from zope.schema import Id
+from zope.schema import Int
+from zope.schema import TextLine
 from zope.security.zcml import Permission
 
 from zope.browsermenu.field import MenuField
@@ -26,31 +29,31 @@ class IMenuDirective(Interface):
     """Define a browser menu"""
 
     id = TextLine(
-        title=u"The name of the menu.",
-        description=u"This is, effectively, an id.",
+        title="The name of the menu.",
+        description="This is, effectively, an id.",
         required=False
     )
 
     title = MessageID(
-        title=u"Title",
-        description=u"A descriptive title for documentation purposes",
+        title="Title",
+        description="A descriptive title for documentation purposes",
         required=False
     )
 
     description = MessageID(
-        title=u"Description",
-        description=u"A description title of the menu.",
+        title="Description",
+        description="A description title of the menu.",
         required=False
     )
 
     class_ = GlobalObject(
-        title=u"Menu Class",
-        description=u"The menu class used to generate the menu.",
+        title="Menu Class",
+        description="The menu class used to generate the menu.",
         required=False
     )
 
     interface = GlobalInterface(
-        title=u"The menu's interface.",
+        title="The menu's interface.",
         required=False
     )
 
@@ -64,26 +67,26 @@ class IMenuItemsDirective(Interface):
     """
 
     menu = MenuField(
-        title=u"Menu name",
-        description=u"The (name of the) menu the items are defined for",
+        title="Menu name",
+        description="The (name of the) menu the items are defined for",
         required=True,
     )
 
     for_ = GlobalObject(
-        title=u"Interface",
-        description=u"The interface the menu items are defined for",
+        title="Interface",
+        description="The interface the menu items are defined for",
         required=True
     )
 
     layer = GlobalInterface(
-        title=u"Layer",
-        description=u"The Layer for which the item is declared.",
+        title="Layer",
+        description="The Layer for which the item is declared.",
         required=False
     )
 
     permission = Permission(
-        title=u"The permission needed access the item",
-        description=u"""
+        title="The permission needed access the item",
+        description="""
         This can usually be inferred by the system, however, doing so
         may be expensive. When displaying a menu, the system tries to
         traverse to the URLs given in each action to determine whether
@@ -98,28 +101,28 @@ class IMenuItem(Interface):
     """
 
     title = MessageID(
-        title=u"Title",
-        description=u"The text to be displayed for the menu item",
+        title="Title",
+        description="The text to be displayed for the menu item",
         required=True
     )
 
     description = MessageID(
-        title=u"A longer explanation of the menu item",
-        description=u"""
+        title="A longer explanation of the menu item",
+        description="""
         A UI may display this with the item or display it when the
         user requests more assistance.""",
         required=False
     )
 
     icon = TextLine(
-        title=u"Icon Path",
-        description=u"Path to the icon resource representing this menu item.",
+        title="Icon Path",
+        description="Path to the icon resource representing this menu item.",
         required=False
     )
 
     permission = Permission(
-        title=u"The permission needed access the item",
-        description=u"""
+        title="The permission needed access the item",
+        description="""
         This can usually be inferred by the system, however, doing so
         may be expensive. When displaying a menu, the system tries to
         traverse to the URLs given in each action to determine whether
@@ -129,8 +132,8 @@ class IMenuItem(Interface):
     )
 
     filter = TextLine(
-        title=u"A condition for displaying the menu item",
-        description=u"""
+        title="A condition for displaying the menu item",
+        description="""
         The condition is given as a TALES expression. The expression
         has access to the variables:
 
@@ -146,15 +149,15 @@ class IMenuItem(Interface):
     )
 
     order = Int(
-        title=u"Order",
-        description=u"A relative position of the menu item in the menu.",
+        title="Order",
+        description="A relative position of the menu item in the menu.",
         required=False,
         default=0
     )
 
     item_class = GlobalObject(
-        title=u"Menu item class",
-        description=u"""
+        title="Menu item class",
+        description="""
         A class to be used as a factory for creating menu item""",
         required=False
     )
@@ -164,8 +167,8 @@ class IMenuItemSubdirective(IMenuItem):
     """Define a menu item within a group of menu items"""
 
     action = TextLine(
-        title=u"The relative url to use if the item is selected",
-        description=u"""
+        title="The relative url to use if the item is selected",
+        description="""
         The url is relative to the object the menu is being displayed
         for.""",
         required=True
@@ -184,16 +187,16 @@ class ISubMenuItemSubdirective(IMenuItem):
     """
 
     action = TextLine(
-        title=u"The relative url to use if the item is selected",
-        description=u"""
+        title="The relative url to use if the item is selected",
+        description="""
         The url is relative to the object the menu is being displayed
         for.""",
         required=False
     )
 
     submenu = TextLine(
-        title=u"Sub-Menu Id",
-        description=u"The menu that will be used to provide the sub-entries.",
+        title="Sub-Menu Id",
+        description="The menu that will be used to provide the sub-entries.",
         required=True,
     )
 
@@ -206,39 +209,39 @@ class IAddMenuItemDirective(IMenuItem):
     """Define an add-menu item"""
 
     for_ = GlobalInterface(
-        title=u"Interface",
-        description=u"The interface the menu items are defined for",
+        title="Interface",
+        description="The interface the menu items are defined for",
         required=False
     )
 
     class_ = GlobalObject(
-        title=u"Class",
-        description=u"""
+        title="Class",
+        description="""
         A class to be used as a factory for creating new objects""",
         required=False
     )
 
     factory = Id(
-        title=u"Factory",
-        description=u"A factory id for creating new objects",
+        title="Factory",
+        description="A factory id for creating new objects",
         required=False,
     )
 
     view = TextLine(
-        title=u"Custom view name",
-        description=u"The name of a custom add view",
+        title="Custom view name",
+        description="The name of a custom add view",
         required=False,
     )
 
     menu = MenuField(
-        title=u"Menu name",
-        description=u"The (name of the) menu the items are defined for",
+        title="Menu name",
+        description="The (name of the) menu the items are defined for",
         required=False,
     )
 
     layer = GlobalInterface(
-        title=u"The layer the custom view is declared for",
-        description=u"The default layer for which the custom view is "
-                    u"applicable. By default it is applied to all layers.",
+        title="The layer the custom view is declared for",
+        description="The default layer for which the custom view is "
+                    "applicable. By default it is applied to all layers.",
         required=False
     )

@@ -36,22 +36,22 @@
   <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)]
 """
 
+import io
+import pprint
+import re
 import unittest
 from doctest import DocTestSuite
-import re
-import pprint
-import io
 
+import zope.component
+from zope.component.interface import provideInterface
+from zope.configuration.xmlconfig import XMLConfig
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.component.interface import provideInterface
-from zope.browsermenu.metaconfigure import _checkViewFor
-
-from zope.configuration.xmlconfig import XMLConfig
+from zope.testing import cleanup
 
 import zope.browsermenu
-import zope.component
-from zope.testing import cleanup
+from zope.browsermenu.metaconfigure import _checkViewFor
+
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
 
@@ -60,7 +60,7 @@ class IX(Interface):
     pass
 
 
-class X(object):
+class X:
     pass
 
 
@@ -68,11 +68,11 @@ class ILayerStub(IBrowserRequest):
     pass
 
 
-class MenuStub(object):
+class MenuStub:
     pass
 
 
-class Context(object):
+class Context:
     info = ''
 
     def __init__(self):
@@ -272,7 +272,7 @@ def test_w_factory_icon_extra_order():
 class TestAddMenuItem(cleanup.CleanUp, unittest.TestCase):
 
     def setUp(self):
-        super(TestAddMenuItem, self).setUp()
+        super().setUp()
         XMLConfig('meta.zcml', zope.component)()
         XMLConfig('meta.zcml', zope.browsermenu)()
 

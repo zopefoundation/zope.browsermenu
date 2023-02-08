@@ -13,19 +13,21 @@
 ##############################################################################
 """Test fields.
 """
-import unittest
 import doctest
+import unittest
+
 from zope.testing import cleanup
 
 
 class TestMenuField(unittest.TestCase):
 
     def test_unconfigured(self):
-        from zope.browsermenu.field import MenuField
         from zope.configuration.exceptions import ConfigurationError
         from zope.schema import ValidationError
 
-        class Resolver(object):
+        from zope.browsermenu.field import MenuField
+
+        class Resolver:
             def resolve(self, name):
                 raise ConfigurationError(name)
 
@@ -33,7 +35,7 @@ class TestMenuField(unittest.TestCase):
         field = field.bind(Resolver())
 
         with self.assertRaises(ValidationError):
-            field.fromUnicode(u'')
+            field.fromUnicode('')
 
 
 def test_suite():

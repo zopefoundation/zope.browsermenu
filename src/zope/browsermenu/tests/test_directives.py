@@ -14,30 +14,29 @@
 """'browser' namespace directive tests
 """
 
-import sys
 import os
+import sys
 import unittest
-
-from zope import component
-from zope.interface import Interface, implementer, directlyProvides
+from io import StringIO
 
 import zope.security.management
-from zope.configuration.xmlconfig import xmlconfig, XMLConfig
-
+from zope.configuration.xmlconfig import XMLConfig
+from zope.configuration.xmlconfig import xmlconfig
+from zope.interface import Interface
+from zope.interface import directlyProvides
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
-
 from zope.publisher.interfaces.browser import IBrowserRequest
-
+from zope.testing import cleanup
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
 
 import zope.browsermenu
-
-from zope.browsermenu.menu import getFirstMenuItem, BrowserMenu
-from zope.browsermenu.interfaces import IMenuItemType, IBrowserMenu
-from zope.testing import cleanup
-
-from io import StringIO
+from zope import component
+from zope.browsermenu.interfaces import IBrowserMenu
+from zope.browsermenu.interfaces import IMenuItemType
+from zope.browsermenu.menu import BrowserMenu
+from zope.browsermenu.menu import getFirstMenuItem
 
 
 class IV(Interface):
@@ -51,7 +50,7 @@ class IC(Interface):
 
 
 @implementer(IV)
-class V1(object):
+class V1:
     pass
 
 
@@ -60,7 +59,7 @@ tests_path = os.path.join(
     'tests')
 
 
-template = u"""<configure
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:browser='http://namespaces.zope.org/browser'
    i18n_domain='zope'>
@@ -75,23 +74,23 @@ class M1(BrowserMenu):
     pass
 
 
-class V2(V1, object):
+class V2(V1):
     pass
 
 
-class VT(V1, object):
+class VT(V1):
     pass
 
 
 @implementer(IC)
-class Ob(object):
+class Ob:
     pass
 
 
 ob = Ob()
 
 
-class NCV(object):
+class NCV:
     """non callable view"""
 
 
@@ -124,21 +123,21 @@ class ITestSkin(ITestLayer):
     """Test Skin."""
 
 
-class MyResource(object):
+class MyResource:
     pass
 
 
 class Test(cleanup.CleanUp, unittest.TestCase):
 
     def setUp(self):
-        super(Test, self).setUp()
+        super().setUp()
         XMLConfig('meta.zcml', zope.browsermenu)()
         component.provideAdapter(DefaultTraversable, (None,), ITraversable)
 
     def tearDown(self):
         if 'test_menu' in dir(sys.modules['zope.app.menus']):
             delattr(sys.modules['zope.app.menus'], 'test_menu')
-        super(Test, self).tearDown()
+        super().tearDown()
 
     def testMenuOverride(self):
         self.assertEqual(
@@ -146,7 +145,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             None)
 
         xmlconfig(StringIO(template % (
-            u'''
+            '''
             <browser:menu
                 id="test_menu" title="Test menu" />
             <browser:menuItem
@@ -180,7 +179,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             xmlconfig,
             StringIO(
                 template %
-                u'''
+                '''
                 <browser:menu
                     id="test_menu" title="Test menu" />
                 <browser:menuItem
@@ -194,7 +193,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         # it works, when the argument is there and a valid interface
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:menuItem
                 for="zope.component.testfiles.views.IC"
                 title="Test Entry"
