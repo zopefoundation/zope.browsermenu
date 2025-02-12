@@ -45,7 +45,7 @@ from zope.browsermenu.menu import BrowserSubMenuItem
 
 try:
     import zope.app  # noqa: F401 (unused symbol)
-except ImportError:  # we don't always have zope.app now
+except ModuleNotFoundError:
     sys.modules['zope.app'] = module('app')
 menus = module('menus')
 sys.modules['zope.app.menus'] = menus
