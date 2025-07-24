@@ -15,7 +15,6 @@
 """
 import os
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -27,7 +26,7 @@ def read(*rnames):
 long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 TESTS_REQUIRE = [
     'zope.testing',
-    'zope.testrunner',
+    'zope.testrunner >= 6.4',
 ]
 
 setup(
@@ -56,9 +55,6 @@ setup(
     description='Browser menu implementation for Zope.',
     long_description=long_description,
     license='ZPL-2.1',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    namespace_packages=['zope'],
     python_requires='>=3.9',
     install_requires=[
         'setuptools',
