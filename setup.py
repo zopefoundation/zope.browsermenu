@@ -57,7 +57,6 @@ setup(
     license='ZPL-2.1',
     python_requires='>=3.9',
     install_requires=[
-        'setuptools',
         'zope.browser',
         'zope.component>=3.7',
         'zope.configuration',
